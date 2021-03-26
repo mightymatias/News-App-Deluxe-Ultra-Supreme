@@ -1,86 +1,183 @@
-/*
-Last update: 22 March 2021
+package sample;
 
-The main method of the project
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
-Contributing authors: Austin Matias
- */
+public class Main extends Application {
 
-import org.json.JSONObject;
+    final PageData[] pages = new PageData[] {
+        new PageData("Title: Ten facts about penguins that will start world war three",
+                "Description: I bet you didn't know all these funny silly"
+                + "things about the worlds most violent birds...",
+                "Via: TheOnion"),
+        new PageData("Title: Holy moly is that a bird",
+                "Description: Birds should not be allowed in banks, here's why...",
+                "Via: Baybel"),
+        new PageData("Title: BMW finally removes blinker stalk since their drivers don't use them anyways",
+                "Description: If you drive a BMW and you don't use your turn signal, then fr*ck you...",
+                "Via: Driver's Everywhere")
+    };
 
-import java.util.Scanner;
+    final String[] viewOptions = new String[] {
+            "Title",
+            "Binomial name",
+            "Picture",
+            "Description"
+    };
 
-public class Main {
+    final ImageView pic = new ImageView();
+    final Label title = new Label();
+    final Label host = new Label();
+    final Label description = new Label();
+    private int currentIndex = -1;
+
+    final static String[] captions = new String[]{
+      "Articles"
+    };
+
+    final static String[] urls = new String[]{
+       "https://www.theonion.com/"
+    };
+
+    final Hyperlink[] hpls = new Hyperlink[captions.length];
+
+    //private int widgetCount = 0;
+
     public static void main(String[] args) {
-        selection();
+        launch(args);
     }
 
-    /**
-     * Given a list of articles, this method prints out the top 10 articles to the console, formatted to look nice.
-     * @param listOfArticles the JSON Object containing the list of articles to print.
-     */
-    public static void printTopTenArticles(JSONObject listOfArticles){
-        API_Translator translator = new API_Translator();
-        for (int i = 0; i < 10; i++){
-            Article toPrint = translator.getSpecificArticleFromJSON(listOfArticles, i);
-            System.out.println();
-            System.out.println("Title: " + toPrint.getTITLE());
-            System.out.println("Author: " + toPrint.getAUTHOR());
-            System.out.println("Description: " + toPrint.getDESCRIPTION());
-            System.out.println();
-            System.out.println("----------");
+
+    @Override
+    public void start(Stage primaryStage) {
+
+
+        primaryStage.setTitle("NADUS");
+        Scene scene = new Scene(new VBox(), 800, 600);
+        scene.setFill(Color.GRAY);
+
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+
+        for(int i = 0; i < captions.length; i++){
+            final Hyperlink hpl = hpls[i] = new Hyperlink(captions[i]);
+            hpl.setFont(Font.font("Arial",14));
+            final String url = urls[i];
+
+            hpl.setOnAction((ActionEvent e) ->{
+                webEngine.load(url);
+            });
         }
 
+        HBox hbox = new HBox();
+        hbox.setAlignment(Pos.BASELINE_CENTER);
+        hbox.getChildren().addAll(hpls);
+
+
+        title.setFont(new Font("Verdana Bold", 16));
+        host.setFont(new Font("Arial Italic", 10));
+        pic.setFitHeight(150);
+        pic.setPreserveRatio(true);
+        description.setWrapText(true);
+        description.setTextAlignment(TextAlignment.JUSTIFY);
+
+        MenuBar menuBar = new MenuBar();
+
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.TOP_RIGHT);
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(0, 10, 0, 10));
+        vbox.getChildren().addAll(hbox, browser, title, host, pic, description);
+        VBox.setVgrow(browser, Priority.ALWAYS);
+
+        Menu menuPreferences = new Menu("Preferences");
+        MenuItem country = new MenuItem("Country");
+
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction((ActionEvent t) -> {
+            System.exit(0);
+        });
+
+
+        /*String path = "https://std1.bebee.com/br/pb/3970/820e6940/1080";
+        String pathToOpen = "https://std1.bebee.com/br/pb/3970/820e6940/1080";
+
+        Image image = new Image(path);
+        ImageView imageView = new ImageView(image);*/
+
+
+        menuPreferences.getItems().addAll(country, exit);
+        menuBar.getMenus().addAll(menuPreferences);
+
+
+
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, vbox);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    /**
-     * A simple selection method to have the user pick from a couple of different options.
-     */
-    public static void selection(){
-        Scanner in = new Scanner(System.in);
-        System.out.println("Welcome! Please choose what you'd like to do by typing the integer to the left of the option.");
-        System.out.println("1. Top 10 Headlines for a particular country.");
-        System.out.println("2. Top 10 Headlines for a particular category");
-
-        System.out.print("Enter your selection: ");
-        int option = in.nextInt();
-
-        switch (option){
-            case 1:
-                topCountryHeadlines();
-                break;
-            case 2:
-                topCategoryHeadlines();
-                break;
+    private void shuffle() {
+        int i = currentIndex;
+        while (i == currentIndex) {
+            i = (int) (Math.random() * pages.length);
         }
-
+        pic.setImage(pages[i].image);
+        title.setText(pages[i].name);
+        host.setText("(" + pages[i].binNames + ")");
+        description.setText(pages[i].description);
+        currentIndex = i;
     }
 
-    public static void topCountryHeadlines(){
-        //possible country tags not yet implemented
-        //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
-        // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
-        // th, tr, tw, ua, us, ve, za]
-        Scanner in = new Scanner(System.in);
-        System.out.println("Please enter the country you'd like!");
-        String country = in.next();
-
-        API_Translator translator = new API_Translator();
-
-        JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
-        printTopTenArticles(topUSHeadlines);
+    private static CheckMenuItem createMenuItem (String title, final Node node){
+        CheckMenuItem cmi = new CheckMenuItem(title);
+        cmi.setSelected(true);
+        cmi.selectedProperty().addListener(
+                (ObservableValue<? extends Boolean> ov, Boolean old_val,
+                 Boolean new_val) -> {
+                    node.setVisible(new_val);
+                });
+        return cmi;
     }
 
-    public static void topCategoryHeadlines(){
-        //possible category tags not yet implemented
-        //possible categories are business, entertainment, general, health, science, sports, technology.
-        Scanner in = new Scanner(System.in);
-        System.out.println("Please enter the category you'd like!");
-        String category = in.next();
-
-        API_Translator translator = new API_Translator();
-
-        JSONObject topCategoryHeadlines = translator.getAllTopHeadlinesForCategory(category);
-        printTopTenArticles(topCategoryHeadlines);
+    private class PageData {
+        public String name;
+        public String description;
+        public String binNames;
+        public Image image;
+        public PageData(String name, String description, String binNames) {
+            this.name = name;
+            this.description = description;
+            this.binNames = binNames;
+            //image = new Image("https://std1.bebee.com/br/pb/3970/820e6940/1080");
+        }
     }
+
 }
