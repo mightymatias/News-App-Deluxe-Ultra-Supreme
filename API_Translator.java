@@ -30,7 +30,7 @@ public class API_Translator {
      */
     public StringBuilder connectAndReturnContents (String _urlString){
         try{
-            //Make the connection.z
+            //Make the connection.
             URL url = new URL(_urlString);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
