@@ -1,5 +1,5 @@
 /*
-Last update: 22 March 2021
+Last update: 9 April 2021
 
 The Article object contains all relevant data about a specific article.
 
@@ -39,6 +39,21 @@ public class Article {
 
     }
 
+    public Article(String _title, String _author, String _description, String _url, String _urlToImage, String _publishedAt,
+                   String _content){
+        try{
+            this.title = _title;
+            this.author = _author;
+            this.description = _description;
+            this.url = _url;
+            this.urlToImage = _urlToImage;
+            this.publishedAt = _publishedAt;
+            this.content = _content;
+        } catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+
     public String getTitle() {
         return title;
     }
@@ -65,5 +80,13 @@ public class Article {
 
     public String getContent() {
         return content;
+    }
+
+    public String toString(){
+        String outString = this.title + "\n" + this.author + "\n" + this.description + "\n" + this.getUrl() + "\n" + this.urlToImage +
+                "\n" + this.publishedAt + "\n" + this.getContent();
+
+        return outString;
+
     }
 }

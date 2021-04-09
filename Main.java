@@ -23,10 +23,7 @@ public class Main {
         API_Translator translator = new API_Translator();
         for (int i = 0; i < 10; i++){
             Article toPrint = translator.getSpecificArticleFromJSON(listOfArticles, i);
-            System.out.println("\nTitle: " + toPrint.getTitle());
-            System.out.println("Author: " + toPrint.getAuthor());
-            System.out.println("Description: " + toPrint.getDescription());
-            System.out.println("\n----------");
+            System.out.println(toPrint.toString() + "\n");
         }
 
     }
