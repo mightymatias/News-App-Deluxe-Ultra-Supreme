@@ -8,10 +8,15 @@ Contributing authors: Austin Matias
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
+        Storage storage = new Storage();
+        storage.initializeStorage();
+        ArrayList<Article> favorites = storage.favoriteArray;
         selection();
     }
 
@@ -20,10 +25,12 @@ public class Main {
      * @param listOfArticles the JSON Object containing the list of articles to print.
      */
     public static void printTopTenArticles(JSONObject listOfArticles){
+        Storage storage = new Storage();
         API_Translator translator = new API_Translator();
         for (int i = 0; i < 10; i++){
             Article toPrint = translator.getSpecificArticleFromJSON(listOfArticles, i);
-            System.out.println(toPrint.toString() + "\n");
+            storage.storeNewFavorite(toPrint.toString());
+            System.out.println(toPrint.toString());
         }
 
     }
