@@ -57,7 +57,7 @@ public class Storage {
             System.out.println("Error: " + e);
             e.printStackTrace();
         }
-        System.out.println(favoriteArray);
+        //System.out.println(favoriteArray);
     }
 
     public void storeNewFavorite(String _newFavoriteFile){

@@ -9,7 +9,9 @@ Contributing authors: Austin Matias
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import org.json.*;
@@ -113,6 +115,28 @@ public class API_Translator {
             System.out.println("Error: " + e);
         }
         return new Article();
+    }
+
+    public ArrayList<Article> getArrayListOfArticlesFromJSONObject(JSONObject _object){
+        ArrayList<Article> articleArrayList = new ArrayList<>();
+        try {
+            for (int i = 1; i <= _object.getJSONArray("articles").length(); i++){
+                articleArrayList.add(getSpecificArticleFromJSON(_object, i));
+            }
+        } catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+        return articleArrayList;
+    }
+
+    public int getLengthOfJSONObjectArticleArray(JSONObject _object){
+        int length = 0;
+        try {
+            length = _object.getJSONArray("articles").length();
+        } catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+        return length;
     }
 
 }

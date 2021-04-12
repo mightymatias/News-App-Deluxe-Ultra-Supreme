@@ -21,18 +21,18 @@ public class Main {
     }
 
     /**
-     * Given a list of articles, this method prints out the top 10 articles to the console, formatted to look nice.
+     * Given a list of articles, this method prints out the articles to the console, formatted to look nice.
      * @param listOfArticles the JSON Object containing the list of articles to print.
      */
-    public static void printTopTenArticles(JSONObject listOfArticles){
+    public static void printArticles(JSONObject listOfArticles){
         Storage storage = new Storage();
         API_Translator translator = new API_Translator();
+        ArrayList<Article> temp = translator.getArrayListOfArticlesFromJSONObject(listOfArticles);
         for (int i = 0; i < 10; i++){
-            Article toPrint = translator.getSpecificArticleFromJSON(listOfArticles, i);
-            storage.storeNewFavorite(toPrint.toString());
-            System.out.println(toPrint.toString());
-        }
-
+            storage.storeNewFavorite(temp.get(i).toString());
+        };
+        System.out.println();
+        System.out.println(temp.toString());
     }
 
     /**
@@ -70,7 +70,7 @@ public class Main {
         API_Translator translator = new API_Translator();
 
         JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
-        printTopTenArticles(topUSHeadlines);
+        printArticles(topUSHeadlines);
     }
 
     public static void topCategoryHeadlines(){
@@ -83,6 +83,6 @@ public class Main {
         API_Translator translator = new API_Translator();
 
         JSONObject topCategoryHeadlines = translator.getAllTopHeadlinesForCategory(category);
-        printTopTenArticles(topCategoryHeadlines);
+        printArticles(topCategoryHeadlines);
     }
 }
