@@ -1,4 +1,4 @@
-public class User implements User_Data_Base {
+public class User extends Array_storage_for_user {
     private String Country;
     private String Interest;
 
