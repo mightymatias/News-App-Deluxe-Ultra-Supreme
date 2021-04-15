@@ -1,5 +1,5 @@
 /*
-Last update: 22 March 2021
+Last update: 9 April 2021
 
 The Article object contains all relevant data about a specific article.
 
@@ -11,13 +11,13 @@ import org.json.JSONObject;
 
 public class Article {
 
-    private String TITLE = "No title to show.";
-    private String AUTHOR = "No author to show.";
-    private String DESCRIPTION = "No description to show.";
-    private String URL = "No URL to show.";
-    private String URL_TO_IMAGE= "No URL image to show";
-    private String PUBLISHED_AT = "No publishing date to show.";
-    private String CONTENT = "No content to show.";
+    private String title = "No title to show.";
+    private String author = "No author to show.";
+    private String description = "No description to show.";
+    private String url = "No URL to show.";
+    private String urlToImage = "No URL image to show";
+    private String publishedAt = "No publishing date to show.";
+    private String content = "No content to show.";
 
     public Article(){
 
@@ -25,13 +25,13 @@ public class Article {
 
     public Article(JSONObject _object){
         try{
-            this.TITLE = _object.getString("title");
-            this.AUTHOR = _object.getString("author");
-            this.DESCRIPTION = _object.getString("description");
-            this.URL = _object.getString("url");
-            this.URL_TO_IMAGE= _object.getString("urlToImage");
-            this.PUBLISHED_AT = _object.getString("publishedAt");
-            this.CONTENT = _object.getString("content");
+            this.title = _object.getString("title");
+            this.author = _object.getString("author");
+            this.description = _object.getString("description");
+            this.url = _object.getString("url");
+            this.urlToImage = _object.getString("urlToImage");
+            this.publishedAt = _object.getString("publishedAt");
+            this.content = _object.getString("content");
 
         } catch (Exception e){
             System.out.println("Error: " + e);
@@ -39,31 +39,54 @@ public class Article {
 
     }
 
-    public String getTITLE() {
-        return TITLE;
+    public Article(String _title, String _author, String _description, String _url, String _urlToImage, String _publishedAt,
+                   String _content){
+        try{
+            this.title = _title;
+            this.author = _author;
+            this.description = _description;
+            this.url = _url;
+            this.urlToImage = _urlToImage;
+            this.publishedAt = _publishedAt;
+            this.content = _content;
+        } catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
-    public String getAUTHOR() {
-        return AUTHOR;
+    public String getTitle() {
+        return title;
     }
 
-    public String getDESCRIPTION() {
-        return DESCRIPTION;
+    public String getAuthor() {
+        return author;
     }
 
-    public String getURL() {
-        return URL;
+    public String getDescription() {
+        return description;
     }
 
-    public String getURL_TO_IMAGE() {
-        return URL_TO_IMAGE;
+    public String getUrl() {
+        return url;
     }
 
-    public String getPUBLISHED_AT() {
-        return PUBLISHED_AT;
+    public String getUrlToImage() {
+        return urlToImage;
     }
 
-    public String getCONTENT() {
-        return CONTENT;
+    public String getPublishedAt() {
+        return publishedAt;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String toString(){
+        String outString = this.title + "\n" + this.author + "\n" + this.description + "\n" + this.getUrl() + "\n" + this.urlToImage +
+                "\n" + this.publishedAt + "\n" + this.getContent();
+
+        return outString;
+
     }
 }
