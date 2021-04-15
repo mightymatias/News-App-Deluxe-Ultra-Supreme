@@ -17,7 +17,6 @@ public class Article {
     private String url = "No URL to show.";
     private String urlToImage = "No URL image to show";
     private String publishedAt = "No publishing date to show.";
-    private String content = "No content to show.";
 
     public Article(){
 
@@ -31,7 +30,6 @@ public class Article {
             this.url = _object.getString("url");
             this.urlToImage = _object.getString("urlToImage");
             this.publishedAt = _object.getString("publishedAt");
-            this.content = _object.getString("content");
 
         } catch (Exception e){
             System.out.println("Error: " + e);
@@ -39,8 +37,7 @@ public class Article {
 
     }
 
-    public Article(String _title, String _author, String _description, String _url, String _urlToImage, String _publishedAt,
-                   String _content){
+    public Article(String _title, String _author, String _description, String _url, String _urlToImage, String _publishedAt){
         try{
             this.title = _title;
             this.author = _author;
@@ -48,7 +45,6 @@ public class Article {
             this.url = _url;
             this.urlToImage = _urlToImage;
             this.publishedAt = _publishedAt;
-            this.content = _content;
         } catch (Exception e){
             System.out.println("Error: " + e);
         }
@@ -78,15 +74,8 @@ public class Article {
         return publishedAt;
     }
 
-    public String getContent() {
-        return content;
-    }
-
     public String toString(){
-        String outString = this.title + "\n" + this.author + "\n" + this.description + "\n" + this.getUrl() + "\n" + this.urlToImage +
-                "\n" + this.publishedAt + "\n" + this.getContent();
-
-        return outString;
-
+        return this.title + "\n" + this.author + "\n" + this.description + "\n" + this.getUrl() + "\n" + this.urlToImage +
+                "\n" + this.publishedAt + "\n\n";
     }
 }
