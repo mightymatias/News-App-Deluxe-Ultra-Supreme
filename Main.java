@@ -1,5 +1,5 @@
 /*
-Last update: 22 March 2021
+Last update: 16 April 2021
 
 The main method of the project
 
@@ -7,23 +7,27 @@ Contributing authors: Austin Matias
  */
 
 import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
+        Storage storage = new Storage();
+        storage.initializeStorage();
         selection();
     }
 
     /**
-     * Given a list of articles, this method prints out the top 10 articles to the console, formatted to look nice.
+     * Given a list of articles, this method prints out the articles to the console, formatted to look nice.
      * @param listOfArticles the JSON Object containing the list of articles to print.
      */
-    public static void printTopTenArticles(JSONObject listOfArticles){
+    public static void printArticles(JSONObject listOfArticles){
         API_Translator translator = new API_Translator();
-        for (int i = 0; i < 10; i++){
-            Article toPrint = translator.getSpecificArticleFromJSON(listOfArticles, i);
-            System.out.println(toPrint.toString() + "\n");
+        ArrayList<Article> temp = translator.getArrayListOfArticlesFromJSONObject(listOfArticles);
+        for (int i = 0; i < temp.toArray().length; i++){
+            Article tempArticle = temp.get(i);
+            System.out.println(tempArticle);
         }
 
     }
@@ -63,7 +67,7 @@ public class Main {
         API_Translator translator = new API_Translator();
 
         JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
-        printTopTenArticles(topUSHeadlines);
+        printArticles(topUSHeadlines);
     }
 
     public static void topCategoryHeadlines(){
@@ -76,6 +80,6 @@ public class Main {
         API_Translator translator = new API_Translator();
 
         JSONObject topCategoryHeadlines = translator.getAllTopHeadlinesForCategory(category);
-        printTopTenArticles(topCategoryHeadlines);
+        printArticles(topCategoryHeadlines);
     }
 }
