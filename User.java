@@ -1,4 +1,4 @@
-public class User extends Array_storage_for_user {
+public class User extends Storage {
     private String Country;
     private String Interest;
 
