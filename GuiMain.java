@@ -1,7 +1,6 @@
-package sample;
 
 /*
-    04/16/2021
+    04/22/2021
     Connor Contursi
     A GUI class for CSC 340.
  */
