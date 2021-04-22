@@ -6,19 +6,11 @@
  */
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuBar;
 import javafx.scene.effect.DropShadow;
@@ -28,8 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
-import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -45,32 +36,22 @@ public class GuiMain extends Application {
     ArrayList<String> URL = new ArrayList<String>();
     ArrayList<String> imageURL = new ArrayList<String>();
 
-    //Creates scrollbar object and image objects
-    final ScrollBar sc = new ScrollBar();
-    //final Image[] images = new Image[10];
-    //final ImageView[] pic = new ImageView[10];
-
+    //Creates scrollpane object and image objects
     final ScrollPane sp = new ScrollPane();
-    //final Label articleName = new Label();
 
     //VBox objects for various things
     final VBox vb = new VBox();
-    //final VBox vbPic = new VBox();
-    //final VBox vbText = new VBox();
-    final HBox hBox = new HBox();
     final VBox vbWeb = new VBox();
 
     //Drop shadow for pictures
     DropShadow shadow = new DropShadow();
 
-    //Web browser objects
-    final WebView browser = new WebView();
-    final WebEngine webEngine = browser.getEngine();
-
+    //caption for hyperlink button
     final static String[] captions = new String[]{
             "Article"
     };
 
+    //hyperlink creation for articles
     final Hyperlink[] hpls = new Hyperlink[captions.length];
 
     //Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
@@ -193,7 +174,7 @@ public class GuiMain extends Application {
 
             //displays various article attributes
             Text title = new Text(article.get(i));
-            title.setFont(new Font("Verdana Bold", 18));
+            title.setFont(new Font("Verdana Bold",  20));
 
             Text auth = new Text(author.get(i));
             auth.setFont(new Font("Arial Italic", 14));
@@ -206,7 +187,8 @@ public class GuiMain extends Application {
 
             //Adjusts picture size
             pic.setFitHeight(300);
-            pic.setPreserveRatio(true);
+            pic.setFitWidth(534);
+            //pic.setPreserveRatio(true);
             pic.setEffect(shadow);
 
             //Drop shadow modifiers
@@ -224,18 +206,23 @@ public class GuiMain extends Application {
         //Scrollbar, menubar, and article components are added to a single group to be passed to the scene
         root.getChildren().addAll(vb, sp, menuBar);
 
+        //creates main scene to display articles
         Scene scene = new Scene(root, 1600, 800);
 
+        //text object to create proper spacing between return button and web object
         Text blank = new Text("\n\n");
 
-        Button button = new Button("return");
+        //button to bring you back to article scene
+        Button button = new Button("  Return  ");
         button.setOnAction((ActionEvent e) -> {
             primaryStage.setScene(scene);
         });
 
+        //generates vbox object for web elements and sets proper spacing
         vbWeb.getChildren().addAll(button, blank);
         vbWeb.getChildren().addAll(hbWeb, browser);
         vbWeb.setAlignment(Pos.TOP_CENTER);
+        vbWeb.setPadding(new Insets(20,0,10,0));
         VBox.setVgrow(browser, Priority.ALWAYS);
         webRoot.getChildren().addAll(vbWeb);
         webRoot.setAutoSizeChildren(true);
@@ -245,10 +232,10 @@ public class GuiMain extends Application {
         primaryStage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
 
+        //generates stage
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);
