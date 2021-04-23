@@ -253,7 +253,7 @@ public class GuiMain extends Application {
         // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
         // th, tr, tw, ua, us, ve, za]
         Scanner in = new Scanner(System.in);
-        System.out.println("Please enter the country you'd like!");
+        System.out.println("Loading...");
         String country = "us";
 
         API_Translator translator = new API_Translator();

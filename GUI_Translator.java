@@ -19,11 +19,10 @@ public class GUI_Translator {
     public GUI_Translator(){}
 
     protected ArrayList<String> setTitleList(ArrayList<Article> _articleList){
-        ArrayList<String> titleListTest = new ArrayList<>();
         for (int i = 0; i < _articleList.toArray().length; i++){
-            titleListTest.add(_articleList.get(i).getTitle());
+            titleList.add(_articleList.get(i).getTitle());
         }
-        return titleListTest;
+        return titleList;
     }
 
     protected ArrayList<String> setAuthorList(ArrayList<Article> _articleList){
