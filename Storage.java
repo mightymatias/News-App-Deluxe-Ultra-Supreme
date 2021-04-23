@@ -15,7 +15,6 @@ public class Storage extends Article {
      * To be used on program load to ensure that the favorite article file exists, and to create it if it does not,
      * then to load the array of favorited articles from system storage.
      */
-
     protected void initializeStorage() {
         ensureFileExistence();
         loadArray();
