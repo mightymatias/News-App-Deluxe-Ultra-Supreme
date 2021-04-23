@@ -56,6 +56,9 @@ public class Main {
     }
 
     public static void topCountryHeadlines(){
+        int i;
+        String[] topCountryList={"ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"};
+
         //possible country tags not yet implemented
         //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
         // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
@@ -63,6 +66,14 @@ public class Main {
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter the country you'd like!");
         String country = in.next();
+        for(i=0;i<topCountryList.length;i++){
+            if (country.equals(topCountryList[i])){
+                 GUIMain.country;
+            }
+            else{
+               GUIMain.errorCountry;
+            }
+        }
 
         API_Translator translator = new API_Translator();
 
@@ -71,11 +82,21 @@ public class Main {
     }
 
     public static void topCategoryHeadlines(){
+        int i;
+        String[] topCategoriesList= {"business","entertainment", "general","health", "science", "sports", "technology"};
         //possible category tags not yet implemented
         //possible categories are business, entertainment, general, health, science, sports, technology.
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter the category you'd like!");
         String category = in.next();
+        for(i=0;i<topCategoriesList.length;i++){
+            if(category.equals(topCategoriesList[i])){
+                GUIMain.category;
+            }
+            else{
+                GUIMain.errorCategory;
+            }
+        }
 
         API_Translator translator = new API_Translator();
 
