@@ -1,7 +1,7 @@
 
 /*
     04/22/2021
-    Connor Contursi
+    Connor Contursi, Austin Matias
     A GUI class for CSC 340.
  */
 
@@ -25,16 +25,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GuiMain extends Application {
 
     //Arrays for all of the data that will be processed
-    ArrayList<String> article = new ArrayList<String>();
-    ArrayList<String> author = new ArrayList<String>();
-    ArrayList<String> summary = new ArrayList<String>();
-    ArrayList<String> URL = new ArrayList<String>();
-    ArrayList<String> imageURL = new ArrayList<String>();
+    private static ArrayList<String> article = new ArrayList<String>();
+    private static ArrayList<String> author = new ArrayList<String>();
+    private static ArrayList<String> summary = new ArrayList<String>();
+    private static ArrayList<String> URL = new ArrayList<String>();
+    private static ArrayList<String> imageURL = new ArrayList<String>();
 
     //Creates scrollpane object and image objects
     final ScrollPane sp = new ScrollPane();
@@ -56,6 +59,7 @@ public class GuiMain extends Application {
 
     //Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
     public void info(){
+        /*
         article.add("Multiple people shot at Austin-East High School in Knoxville - Knoxville News Sentinel");
         article.add("Joel Greenberg tried to get pardon from Trump through Gaetz: report - Business Insider");
         article.add("Biden's CBP nominee defended sanctuary cities, criticized police working with immigration authorities - Fox News");
@@ -110,6 +114,7 @@ public class GuiMain extends Application {
         imageURL.add("https://media.npr.org/assets/img/2021/04/12/gettyimages-1232264282_wide-6cf5f56d92155b1888551db4e389fe4054001d0e.jpg?s=1400");
         imageURL.add("https://www.gannett-cdn.com/presto/2021/04/12/USAT/37a8a088-1932-4006-8f6f-4d8ad199bf69-song-macaulay.jpg?crop=1919,1080,x0,y57&width=1600&height=800&fit=bounds");
         imageURL.add("https://fox4kc.com/wp-content/uploads/sites/16/2021/04/britt-reid-mugshot.jpg?w=1280");
+         */
     }
 
     //Main GUI method
@@ -155,7 +160,7 @@ public class GuiMain extends Application {
         sp.pannableProperty().set(true);
 
         //Loop that pushes all of the article information to the GUI
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < article.toArray().length; i++) {
             //Allows the images to be displayed
             final Image image = new Image(imageURL.get(i));
             final ImageView pic = new ImageView(image);
@@ -238,6 +243,34 @@ public class GuiMain extends Application {
     }
 
     public static void main(String[] args) {
+        topCountryHeadlines();
         launch(args);
+    }
+
+    public static void topCountryHeadlines(){
+        //possible country tags not yet implemented
+        //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
+        // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
+        // th, tr, tw, ua, us, ve, za]
+        Scanner in = new Scanner(System.in);
+        System.out.println("Please enter the country you'd like!");
+        String country = "us";
+
+        API_Translator translator = new API_Translator();
+
+
+        JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
+        ArrayList<Article> articleArrayList = translator.getArrayListOfArticlesFromJSONObject(topUSHeadlines);
+        primeArrayLists(articleArrayList);
+
+    }
+
+    public static void primeArrayLists(ArrayList<Article> _articleList){
+        GUI_Translator guiTranslator = new GUI_Translator();
+        article = guiTranslator.setTitleList(_articleList);
+        author = guiTranslator.setAuthorList(_articleList);
+        summary = guiTranslator.setDescriptionList(_articleList);
+        URL = guiTranslator.setUrlList(_articleList);
+        imageURL = guiTranslator.setImageUrlList(_articleList);
     }
 }
