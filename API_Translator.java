@@ -59,6 +59,7 @@ public class API_Translator {
     /**END of API connection*/
 
     /**Start of Searching methods
+
      * Method that retrieves the top headlines for a certain country.
      *
      * @param _country The country to get the top headlines for.
@@ -145,24 +146,12 @@ public class API_Translator {
         return new JSONObject();
     }
 
-    /**END OF Searching methods*/
-
-    /**Start of JSON extraction*
-     * These modthod take a JSON Object with multiple articles, and pulls a specific one out.
-     * @param _object The JSON Object containing multiple articles.
-     * @return An article object containing information about the article.
+    /**
+     * This method takes in a JSON Object and creates an ArrayList of Article objects.
+     * @param _object the JSON Object containing articles.
+     * @return The ArrayList of article objects.
      */
-
-    public Article getSpecificArticleFromJSON(JSONObject _object, int _articleNumber){
-        try {
-            return new Article(_object.getJSONArray("articles").getJSONObject(_articleNumber));
-        } catch (Exception e){
-            System.out.println("Error: " + e);
-        }
-        return new Article();
-    }
-
-    public ArrayList<Article> getArrayListOfArticlesFromJSONObject(JSONObject _object){
+    protected ArrayList<Article> getArrayListOfArticlesFromJSONObject(JSONObject _object){
         ArrayList<Article> articleArrayList = new ArrayList<>();
         try {
             for (int i = 1; i <= _object.getJSONArray("articles").length(); i++){
@@ -173,8 +162,65 @@ public class API_Translator {
         }
         return articleArrayList;
     }
+  
+    /**
+     * A method that connects to the API using a given URL, and returns a string containing data from the given URL.
+     * @param _urlString The URL to connect to.
+     * @return A StringBuilder object containing the results of the URL connection.
+     */
+    private StringBuilder connectAndReturnContents (String _urlString){
+        try{
+            //Make the connection.
+            URL url = new URL(_urlString);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
 
-    public int getLengthOfJSONObjectArticleArray(JSONObject _object){
+            //Examine the response code.
+            int status = con.getResponseCode();
+            if (status != 200){
+                System.out.println("connection request failed");
+                return new StringBuilder("Error: API request failed." +
+                        " Status: ").append(status);
+            } else {
+                //Parse input stream into a text string.
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder content = new StringBuilder();
+                while ((inputLine = in.readLine()) != null){
+                    content.append(inputLine);
+                }
+                //Close the connection.
+                in.close();
+                con.disconnect();
+                return content;
+            }
+        } catch (Exception e){
+            return new StringBuilder("*****Error: ").append(e);
+        }
+    }
+
+    /**
+     * This class takes a JSON Object with multiple articles, and pulls a specific one out.
+     * @param _object The JSON Object containing multiple articles.
+     * @param _articleNumber The index in the array of the article to be pulled out.
+     * @return An article object containing information about the article.
+     */
+    private Article getSpecificArticleFromJSON(JSONObject _object, int _articleNumber){
+        try {
+            return new Article(_object.getJSONArray("articles").getJSONObject(_articleNumber));
+        } catch (Exception e){
+            System.out.println("**Error: " + e);
+        }
+        return new Article();
+    }
+
+    /**
+     * A helper method to get the number of articles in a JSON Object, useful when iterating through the JSON Object
+     * in other methods.
+     * @param _object The JSON Object to get the length of.
+     * @return The number of articles in the JSON Object.
+     */
+    private int getLengthOfJSONObjectArticleArray(JSONObject _object){
         int length = 0;
         try {
             length = _object.getJSONArray("articles").length();
@@ -183,5 +229,4 @@ public class API_Translator {
         }
         return length;
     }
-    /**END of Json extractions*/
 }

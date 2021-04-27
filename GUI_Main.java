@@ -1,7 +1,9 @@
 /*
-    04/22/2021
-    Connor Contursi, Austin Matias
-    A GUI class for CSC 340.
+Last update: 27 April 2021
+
+The main class that runs the GUI for the News App.
+
+Contributing authors: Connor Contursi, Austin Matias
  */
 
 import javafx.application.Application;
@@ -29,12 +31,14 @@ import java.util.ArrayList;
 
 public class GUI_Main extends Application {
 
+    private static Storage favoriteStorage = new Storage();
+
     //Arrays for all of the data that will be processed
-    private static ArrayList<String> article = new ArrayList<String>();
-    private static ArrayList<String> author = new ArrayList<String>();
-    private static ArrayList<String> summary = new ArrayList<String>();
-    private static ArrayList<String> URL = new ArrayList<String>();
-    private static ArrayList<String> imageURL = new ArrayList<String>();
+    private static ArrayList<String> article = new ArrayList<>();
+    private static ArrayList<String> author = new ArrayList<>();
+    private static ArrayList<String> summary = new ArrayList<>();
+    private static ArrayList<String> URL = new ArrayList<>();
+    private static ArrayList<String> imageURL = new ArrayList<>();
 
     //Creates scrollpane object and image objects
     final ScrollPane sp = new ScrollPane();
@@ -69,6 +73,11 @@ public class GUI_Main extends Application {
         //gets all article information
         JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
         ArrayList<Article> articleArrayList = translator.getArrayListOfArticlesFromJSONObject(topUSHeadlines);
+
+        for (int i = 0; i < articleArrayList.toArray().length; i++){
+            favoriteStorage.newFavorite(articleArrayList.get(i));
+        }
+
         primeArrayLists(articleArrayList);
     }
 
@@ -262,7 +271,10 @@ public class GUI_Main extends Application {
     starts program
      */
     public static void main(String[] args) {
+        favoriteStorage.initializeStorage();
         launch(args);
+        System.out.println("test");
+        favoriteStorage.saveArrayToFile();
     }
 
     /*
