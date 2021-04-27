@@ -37,10 +37,9 @@ public class Storage extends Article {
     /**
      * Create file and load file data into array
      */
-    protected void initializeStorage() throws IOException {
+    protected void initializeStorage() {
         ensureFileExistence();
         loadArray();
-        clearStorage();
     }
 
     protected void saveArrayToFile(){
@@ -64,6 +63,7 @@ public class Storage extends Article {
     private boolean ensureFileExistence() {
         //create the file object
         File favoriteArticles = new File(filePath);
+
         //check to see if the file exists, if not, create it
         try {
             if (!favoriteArticles.exists()) {
@@ -73,6 +73,7 @@ public class Storage extends Article {
             System.out.println("Error with Storage.ensureFileExistence: " + e);
             e.printStackTrace();
         }
+
         //return statement should always return true
         return favoriteArticles.exists();
     }
@@ -110,7 +111,6 @@ public class Storage extends Article {
             System.out.println("Error with Storage.storeTxt: " + e);
             e.printStackTrace();
         }
-        //System.out.println(favoriteArray);
     }
 
     /**Modification Phase*/
@@ -126,18 +126,18 @@ public class Storage extends Article {
      * Using hashmap to search for that article index in the array
      * After that remove it from running Array before update storage*/
     public void deleteArticle (String _title) {
-        /**String gonna be the title as key, Integer gonna be the index of that title in array.*/
-        /** def loadfactor 0.7f*/
+        //String gonna be the title as key, Integer gonna be the index of that title in array.*/
+        // def loadfactor 0.7f*/
         Map<String, Integer> articleIndex = new HashMap<String, Integer>();
 
-        for (int i = 0; i < favoriteArray.size(); i++) {                                        /** looping any indexing title of article in favoriteArray*/
+        for (int i = 0; i < favoriteArray.size(); i++) {                                        // looping any indexing title of article in favoriteArray*/
             String currentIndexTitle = favoriteArray.get(i).getTitle();
             int indexValue = i;
-            articleIndex.put(currentIndexTitle, indexValue);                                    /**put current pair ("title", index) into the map*/
+            articleIndex.put(currentIndexTitle, indexValue);                                    //put current pair ("title", index) into the map*/
         }
 
-        if (articleIndex.containsKey(_title)) {                                                 /**checking existence of article*/
-            int getIndex = articleIndex.get(_title);                                            /** getting the index from given title*/
+        if (articleIndex.containsKey(_title)) {                                                 //checking existence of article*/
+            int getIndex = articleIndex.get(_title);                                            // getting the index from given title*/
             favoriteArray.remove(getIndex);
             System.out.println("Article has been removed from your favorite list.");
         }
@@ -175,15 +175,6 @@ public class Storage extends Article {
             e.printStackTrace();
         }
 
-        /*
-        Commenting this out to try a new way of clearing the file. This old code was running indefinitely
-
-        Scanner input = null;
-        try {
-            input = new Scanner(new File(filePath));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        */
     }
   
   /** Clear the current txt file and reload into it with new list from the arraylist*/

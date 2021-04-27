@@ -70,20 +70,21 @@ public class Main {
         String country = in.next();
         for(i=0;i<topCountryList.length;i++){
             if (country.equals(topCountryList[i])){
-                 GUIMain.country;
+                     //GUIMain.country;     method doesn't exist. commented it out until I find out who/why
             }
             else{
-               GUIMain.errorCountry;
+               //GUIMain.errorCountry;      method doesn't exist. commented it out until I find out who/why
             }
         }
 
         API_Translator translator = new API_Translator();
 
-        JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
+        JSONObject topUSHeadlines = translator.sortByCountry(country);
         printArticles(topUSHeadlines);
     }
 
     public static void topCategoryHeadlines(){
+
         int i;
         String[] topCategoriesList= {"business","entertainment", "general","health", "science", "sports", "technology"};
         //possible category tags not yet implemented
@@ -93,16 +94,16 @@ public class Main {
         String category = in.next();
         for(i=0;i<topCategoriesList.length;i++){
             if(category.equals(topCategoriesList[i])){
-                GUIMain.category;
+                //GUIMain.category;         method doesn't exist. commented it out until I find out who/why
             }
             else{
-                GUIMain.errorCategory;
+                //GUIMain.errorCategory;    method doesn't exist. commented it out until I find out who/why
             }
         }
 
         API_Translator translator = new API_Translator();
 
-        JSONObject topCategoryHeadlines = translator.getAllTopHeadlinesForCategory(category);
+        JSONObject topCategoryHeadlines = translator.sortByCategory(category);
         printArticles(topCategoryHeadlines);
     }
 }

@@ -71,7 +71,7 @@ public class GUI_Main extends Application {
         API_Translator translator = new API_Translator();
 
         //gets all article information
-        JSONObject topUSHeadlines = translator.getAllTopHeadlinesForCountry(country);
+        JSONObject topUSHeadlines = translator.sortByCountry(country);
         ArrayList<Article> articleArrayList = translator.getArrayListOfArticlesFromJSONObject(topUSHeadlines);
 
         for (int i = 0; i < articleArrayList.toArray().length; i++){
@@ -103,6 +103,7 @@ public class GUI_Main extends Application {
 
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction((ActionEvent t) -> {
+            favoriteStorage.saveArrayToFile();
             System.exit(0);
         });
 
@@ -273,7 +274,6 @@ public class GUI_Main extends Application {
     public static void main(String[] args) {
         favoriteStorage.initializeStorage();
         launch(args);
-        System.out.println("test");
         favoriteStorage.saveArrayToFile();
     }
 
