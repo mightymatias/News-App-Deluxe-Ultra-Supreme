@@ -35,7 +35,7 @@ public class Storage extends Article {
     /**
      * The default constructor for the storage object.
      */
-    public Storage(){}
+    protected Storage(){}
 
     /**
      * To be used on program load to ensure that the favorite article file exists, and to create it if it does not,
