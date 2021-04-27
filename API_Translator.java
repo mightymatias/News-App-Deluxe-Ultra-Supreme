@@ -1,9 +1,9 @@
 /*
-Last update: 27 April 2021
+Last update: 27 April 2021.
 
 Methods that interact directly with the News API.
 
-Contributing authors: Austin Matias, Quan Dinh
+Contributing authors: Austin Matias, Quan Dinh.
  */
 
 import java.io.BufferedReader;
@@ -29,7 +29,7 @@ public class API_Translator {
       * @param _country The country to get the top headlines for.
       * @return A JSON Object containing all the top headlines for a certain country.
       */
-    public JSONObject sortByCountry(String _country) {
+    protected JSONObject sortByCountry(String _country) {
         //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
         // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
         // th, tr, tw, ua, us, ve, za]
@@ -55,7 +55,7 @@ public class API_Translator {
      * @param _category the category of headlines to get.
      * @return a JSON object containing the top headlines for that category.
      */
-    public JSONObject sortByCategory(String _category) {
+    protected JSONObject sortByCategory(String _category) {
         String cleanCategory = _category.toLowerCase();
         String callAction = "top-headlines?country=us&category=";
         String urlString = BASE_URL + callAction + cleanCategory + API_PREFIX + API_KEY;
@@ -76,9 +76,9 @@ public class API_Translator {
      * Method to search by a specific keyword or multiple keywords.
      * Method by Quan Dinh.
      * @param _keyword The keyword phrase to search by.
-     * @return
+     * @return A JSON Object containing all headlines returned from the search.
      */
-    public JSONObject sortByKeyword(String _keyword) {
+    protected JSONObject sortByKeyword(String _keyword) {
         String cleanKw = _keyword.replaceAll("\\s", "_").toLowerCase();
         String callAction = "top-headlines?q=";
         String urlString = BASE_URL + callAction + cleanKw + API_PREFIX + API_KEY;
@@ -95,17 +95,13 @@ public class API_Translator {
         return new JSONObject();
     }
 
-    /* Quan Dinh Search by domain
-     *   NOTE: the domain is the name part only, example: www.facebook.com the input will be facebook
-     * */
-
     /**
      * Method to search by domain.
      * Method by Quan Dinh.
-     * @param _domainName The domian to search for.
-     * @return
+     * @param _domainName The domain to search for.
+     * @return A JSON Object containing all headlines returned from the search.
      */
-    public JSONObject sortByDom(String _domainName) {
+    protected JSONObject sortByDom(String _domainName) {
         String cleanDom = _domainName.toLowerCase();
         String callAction = "top-headlines?domains=";
         String urlString = BASE_URL + callAction + cleanDom + ".com" + API_PREFIX + API_KEY;
