@@ -1,5 +1,5 @@
 /*
-Last Update: 23 April 2021
+Last Update: 27 April 2021
 
 This class serves to interact between the articles and the GuiMain class.
 
@@ -9,68 +9,86 @@ import java.util.ArrayList;
 
 public class GUI_Translator {
 
-    protected ArrayList<String> titleList = new ArrayList<String>();
-    protected ArrayList<String> authorList = new ArrayList<String>();
-    protected ArrayList<String> descriptionList = new ArrayList<String>();
-    protected ArrayList<String> UrlList = new ArrayList<String>();
-    protected ArrayList<String> ImageUrlList = new ArrayList<String>();
+    //An arrayList containing all of the titles that need to be displayed on the GUI.
+    protected ArrayList<String> titleList = new ArrayList<>();
 
+    //An arrayList containing all of the authors that need to be displayed on the GUI.
+    protected ArrayList<String> authorList = new ArrayList<>();
 
+    //An arrayList containing all of the descriptions that need to be displayed on the GUI.
+    protected ArrayList<String> descriptionList = new ArrayList<>();
+
+    //An arrayList containing all of the URLs that need to be displayed on the GUI.
+    protected ArrayList<String> urlList = new ArrayList<>();
+
+    //An arrayList containing all of the header image URLs that need to be displayed on the GUI.
+    protected ArrayList<String> imageUrlList = new ArrayList<>();
+
+    /**
+     * The default constructor for the translator.
+     */
     public GUI_Translator(){}
 
+    //=================  SETTERS ===============
+
+    /**
+     * This method takes an arrayList of Article objects, and populates titleList with the titles of every article
+     * @param _articleList An arrayList of Article objects.
+     * @return An arrayList containing titles of articles.
+     */
     protected ArrayList<String> setTitleList(ArrayList<Article> _articleList){
         for (int i = 0; i < _articleList.toArray().length; i++){
-            titleList.add(_articleList.get(i).getTitle());
+            this.titleList.add(_articleList.get(i).getTitle());
         }
-        return titleList;
+        return this.titleList;
     }
 
+    /**
+     * This method takes an arrayList of Article objects, and populates authorList with the authors of every article
+     * @param _articleList An arrayList of Article objects.
+     * @return An arrayList containing authors of articles.
+     */
     protected ArrayList<String> setAuthorList(ArrayList<Article> _articleList){
         for (int i = 0; i < _articleList.toArray().length; i++){
-            authorList.add(_articleList.get(i).getAuthor());
+            this.authorList.add(_articleList.get(i).getAuthor());
         }
-        return authorList;
+        return this.authorList;
     }
 
+    /**
+     * This method takes an arrayList of Article objects, and populates descriptionList with the descriptions of every article
+     * @param _articleList An arrayList of Article objects.
+     * @return An arrayList containing descriptions of articles.
+     */
     protected ArrayList<String> setDescriptionList(ArrayList<Article> _articleList){
         for (int i = 0; i < _articleList.toArray().length; i++){
-            descriptionList.add(_articleList.get(i).getDescription());
+            this.descriptionList.add(_articleList.get(i).getDescription());
         }
-        return descriptionList;
+        return this.descriptionList;
     }
 
+    /**
+     * This method takes an arrayList of Article objects, and populates UrlList with the URLs of every article
+     * @param _articleList An arrayList of Article objects.
+     * @return An arrayList containing URLs of articles.
+     */
     protected ArrayList<String> setUrlList(ArrayList<Article> _articleList){
         for (int i = 0; i < _articleList.toArray().length; i++){
-            UrlList.add(_articleList.get(i).getUrl());
+            this.urlList.add(_articleList.get(i).getUrl());
         }
-        return UrlList;
+        return this.urlList;
     }
 
+    /**
+     * This method takes an arrayList of Article objects, and populates ImageUrlList with the header image URLs of every article
+     * @param _articleList An arrayList of Article objects.
+     * @return An arrayList containing header image URLs of articles.
+     */
     protected ArrayList<String> setImageUrlList(ArrayList<Article> _articleList){
         for (int i = 0; i < _articleList.toArray().length; i++){
-            ImageUrlList.add(_articleList.get(i).getUrlToImage());
+            this.imageUrlList.add(_articleList.get(i).getUrlToImage());
         }
-        return ImageUrlList;
-    }
-
-    public ArrayList<String> getTitleList() {
-        return titleList;
-    }
-
-    public ArrayList<String> getAuthorList() {
-        return authorList;
-    }
-
-    public ArrayList<String> getDescriptionList() {
-        return descriptionList;
-    }
-
-    public ArrayList<String> getUrlList() {
-        return UrlList;
-    }
-
-    public ArrayList<String> getImageUrlList() {
-        return ImageUrlList;
+        return this.imageUrlList;
     }
 }
 

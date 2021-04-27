@@ -1,15 +1,27 @@
+/*
+Last update: 27 April 2021.
+
+The Storage object contains method that manipulate persistent data storage.
+
+Contributing authors: Austin Matias, Dillon Halbert, Quan Dinh.
+ */
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage extends Article {
 
-    private String filePath = "FavoriteArticles.txt";
+    //The ArrayList that the favorite articles are saved in while the program runs.
     protected ArrayList<Article> favoriteArray = new ArrayList<>();
-    protected int arrayCounter=0;
-    public Storage() {
 
-    }
+    protected int arrayCounter=0;
+
+    //The file path for the file that will contain the favorite articles while the application is closed.
+    private String filePath = "FavoriteArticles.txt";
+
+    //The default constructor
+    public Storage(){}
 
     /**
      * To be used on program load to ensure that the favorite article file exists, and to create it if it does not,
@@ -21,6 +33,24 @@ public class Storage extends Article {
 
     }
 
+    protected void saveArrayToFile(){
+        clear();
+        for(int i=0;i<favoriteArray.toArray().length;i++){
+            storeTxt(favoriteArray.get(i).toString());
+        }
+
+    }
+
+    protected void newFavorite(Article article){
+        String title = article.getTitle();
+        String author = article.getAuthor();
+        String description = article.getDescription();
+        String url = article.getUrl();
+        String urlToImage = article.getUrlToImage();
+        String publishedAt = article.getPublishedAt();
+        favoriteArray.add(article);
+    }
+
     private boolean ensureFileExistence() {
         //create the file object
         File favoriteArticles = new File(filePath);
@@ -30,7 +60,7 @@ public class Storage extends Article {
                 favoriteArticles.createNewFile();
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error with Storage.ensureFileExistence: " + e);
             e.printStackTrace();
         }
         //return statement should always return true
@@ -54,27 +84,19 @@ public class Storage extends Article {
             }
 
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error with Storage.loadArray: " + e);
             e.printStackTrace();
         }
         System.out.println(favoriteArray);
     }
-    public void newFavorite(Article article){
-        String title = article.getTitle();
-        String author = article.getAuthor();
-        String description = article.getDescription();
-        String url = article.getUrl();
-        String urlToImage = article.getUrlToImage();
-        String publishedAt = article.getPublishedAt();
-        favoriteArray.add(article);
-    }
-    public void storeTxt(String _newFavoriteFile) {
+
+    private void storeTxt(String _newFavoriteFile) {
         try {
             FileWriter out = new FileWriter(filePath, true);
             out.append(_newFavoriteFile);
             out.close();
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error with Storage.storeTxt: " + e);
             e.printStackTrace();
         }
     }
@@ -96,13 +118,24 @@ public class Storage extends Article {
                 favoriteArray.remove(x);
             }
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error with Storage.delete: " + e);
             e.printStackTrace();
         }
-        saveArrayToFile(favoriteArray);
+        saveArrayToFile();
     }
 
     private void clear() {
+        try {
+            FileWriter favoriteFile = new FileWriter(filePath, false);
+            favoriteFile.write("");
+        } catch (Exception e){
+            System.out.println("Error with Storage.clear: " + e);
+            e.printStackTrace();
+        }
+
+        /*
+        Commenting this out to try a new way of clearing the file. This old code was running indefinitely
+
         Scanner input = null;
         try {
             input = new Scanner(new File(filePath));
@@ -112,14 +145,7 @@ public class Storage extends Article {
         while (input.hasNextLine()) {
             filePath.format(" ");
         }
+        */
     }
-    private void saveArrayToFile(ArrayList favoriteArray){
-        for(int i=0;i<favoriteArray.toArray().length;i++){
-            clear();
-            storeTxt(favoriteArray.get(i).toString());
-        }
-
-    }
-
 }
 
