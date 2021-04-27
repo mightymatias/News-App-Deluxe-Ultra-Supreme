@@ -19,50 +19,60 @@ public class Storage extends Article {
     protected ArrayList<Article> favoriteArray = new ArrayList<>();
 
     protected int arrayCounter=0;
-  
-      /**         HOW DOES THIS CLASS WORK? (BASIC)
+
+    //The file path for the file that will contain the favorite articles while the application is closed.
+    private String filePath = "FavoriteArticles.txt";
+
+
+    /**         HOW DOES THIS CLASS WORK? (BASIC)
      *          First: Having an ArrayList of favorite Article and Check for existent of txt file (if not exist then create) (if exist then load data into an arraylist)
      *          Second: (optional) to add an article to favorite                    use method  addArticle (Article _article)
      *          Third:  (optional) to delete an article from the List               use method  deleteArticle (String _title)
      *          Fourth: (optional) to select an article from the List               use method  selectArticle (String _title)
      */
 
-    //The file path for the file that will contain the favorite articles while the application is closed.
-    private String filePath = "FavoriteArticles.txt";
 
-    //The default constructor
+    /**
+     * The default constructor for the storage object.
+     */
     public Storage(){}
 
-    /**Initialization Phase*/
     /**
-     * Create file and load file data into array
+     * To be used on program load to ensure that the favorite article file exists, and to create it if it does not,
+     * then to load the array of favorited articles from system storage.
      */
     protected void initializeStorage() {
         ensureFileExistence();
         loadArray();
     }
 
+    /**
+     * The method that runs on application close to dump the favoriteArray into a text file
+     * for long term data storage.
+     */
     protected void saveArrayToFile(){
         clear();
-        for(int i=0;i<favoriteArray.toArray().length;i++){
-            storeTxt(favoriteArray.get(i).toString());
+        for(int i=0;i<this.favoriteArray.toArray().length;i++){
+            storeTxt(this.favoriteArray.get(i).toString());
         }
-
     }
 
+    /**
+     * This method adds an Article object to favoriteArray.
+     * @param article The Article object to add.
+     */
     protected void newFavorite(Article article){
-        String title = article.getTitle();
-        String author = article.getAuthor();
-        String description = article.getDescription();
-        String url = article.getUrl();
-        String urlToImage = article.getUrlToImage();
-        String publishedAt = article.getPublishedAt();
-        favoriteArray.add(article);
+        this.favoriteArray.add(article);
     }
 
+    /**
+     * A method to ensure that the file to save favorites to exists, and create the file
+     * if it doesn't exist.
+     * @return A boolean that is true if the file exists. Should always return true.
+     */
     private boolean ensureFileExistence() {
         //create the file object
-        File favoriteArticles = new File(filePath);
+        File favoriteArticles = new File(this.filePath);
 
         //check to see if the file exists, if not, create it
         try {
@@ -79,11 +89,11 @@ public class Storage extends Article {
     }
 
     /**
-     * Load file data to array
+     * This method loads the favoriteArray from the text file on start up.
      */
     private void loadArray() {
         try {
-            Scanner input = new Scanner(new File(filePath));
+            Scanner input = new Scanner(new File(this.filePath));
             //setting variables to be assigned to object
             while (input.hasNextLine()) {
                 String title = input.nextLine();
@@ -93,19 +103,36 @@ public class Storage extends Article {
                 String urlToImage = input.nextLine();
                 String publishedAt = input.nextLine();
                 input.nextLine();
-                favoriteArray.add(new Article(title, author, description, url, urlToImage, publishedAt));
+                this.favoriteArray.add(new Article(title, author, description, url, urlToImage, publishedAt));
             }
         } catch (Exception e) {
             System.out.println("Error with Storage.loadArray: " + e);
             e.printStackTrace();
         }
-        System.out.println(favoriteArray);
+        System.out.println(this.favoriteArray);
     }
 
-    private void storeTxt(String _newFavoriteFile) {
+    /**
+     * This method completely clears the favorites file.
+     */
+    private void clear() {
         try {
-            FileWriter out = new FileWriter(filePath, true);
-            out.append(_newFavoriteFile);
+            FileWriter favoriteFile = new FileWriter(this.filePath, false);
+            favoriteFile.write("");
+        } catch (Exception e){
+            System.out.println("Error with Storage.clear: " + e);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method stores a line of text to the favorites file.
+     * @param _textToStore the line of text to store to the file.
+     */
+    private void storeTxt(String _textToStore) {
+        try {
+            FileWriter out = new FileWriter(this.filePath, true);
+            out.append(_textToStore);
             out.close();
         } catch (Exception e) {
             System.out.println("Error with Storage.storeTxt: " + e);
@@ -113,32 +140,40 @@ public class Storage extends Article {
         }
     }
 
-    /**Modification Phase*/
-    /**Clear storage*/
+
+    //==============UNTESTED CODE====================
+
+
+    /**
+     * QUAN YOU NEED TO WRITE THE PURPOSE OF THIS METHOD HERE
+     * @throws IOException YOU NEED TO WRITE WHY THIS THROWS AN EXCEPTION HERE
+     */
     public void clearStorage() throws IOException {
         FileWriter fw = new FileWriter("FavoriteArticles.txt", false);
         fw.write("");
         fw.close();
     }
 
-    /** Delete from DB
-     /** @paramm _title might be getting from Article.getTitle
+    /**
+     * This method deletes an Article object from favoriteArray based on title.
      * Using hashmap to search for that article index in the array
-     * After that remove it from running Array before update storage*/
+     * After that remove it from running Array before update storage
+     * @param _title the title of the article to delete
+     */
     public void deleteArticle (String _title) {
         //String gonna be the title as key, Integer gonna be the index of that title in array.*/
         // def loadfactor 0.7f*/
         Map<String, Integer> articleIndex = new HashMap<String, Integer>();
 
-        for (int i = 0; i < favoriteArray.size(); i++) {                                        // looping any indexing title of article in favoriteArray*/
-            String currentIndexTitle = favoriteArray.get(i).getTitle();
+        for (int i = 0; i < this.favoriteArray.size(); i++) {                                        // looping any indexing title of article in favoriteArray*/
+            String currentIndexTitle = this.favoriteArray.get(i).getTitle();
             int indexValue = i;
             articleIndex.put(currentIndexTitle, indexValue);                                    //put current pair ("title", index) into the map*/
         }
 
         if (articleIndex.containsKey(_title)) {                                                 //checking existence of article*/
             int getIndex = articleIndex.get(_title);                                            // getting the index from given title*/
-            favoriteArray.remove(getIndex);
+            this.favoriteArray.remove(getIndex);
             System.out.println("Article has been removed from your favorite list.");
         }
         else
@@ -154,10 +189,10 @@ public class Storage extends Article {
             if (x < 0) {
                 System.out.println("Error number is negative: ");
 
-            } else if (x > favoriteArray.toArray().length) {
+            } else if (x > this.favoriteArray.toArray().length) {
                 System.out.println("Error number is bigger than users list: ");
             } else {
-                favoriteArray.remove(x);
+                this.favoriteArray.remove(x);
             }
         } catch (Exception e) {
             System.out.println("Error with Storage.delete: " + e);
@@ -166,23 +201,14 @@ public class Storage extends Article {
         saveArrayToFile();
     }
   
-  private void clear() {
-        try {
-            FileWriter favoriteFile = new FileWriter(filePath, false);
-            favoriteFile.write("");
-        } catch (Exception e){
-            System.out.println("Error with Storage.clear: " + e);
-            e.printStackTrace();
-        }
 
-    }
   
   /** Clear the current txt file and reload into it with new list from the arraylist*/
     public void updateStorage() throws IOException {
         clearStorage();
         FileWriter textLoader = new FileWriter("FavoriteArticles.txt", true);
-        for (int i  = 0; i < favoriteArray.size(); i++) {                                       /**toString each article in the favoriteArray then add it into the DB*/
-            String theArticle = favoriteArray.get(i).toString();
+        for (int i  = 0; i < this.favoriteArray.size(); i++) {                                       /**toString each article in the favoriteArray then add it into the DB*/
+            String theArticle = this.favoriteArray.get(i).toString();
             textLoader.append(theArticle);
         }
         textLoader.close();
@@ -191,7 +217,7 @@ public class Storage extends Article {
     /** Add a new article to theDataArray (line 11) but this time require an Article Obj*/
     public void addArticle(Article _article)
     {
-        favoriteArray.add(_article);
+        this.favoriteArray.add(_article);
     }
 
     /**Support method*/
@@ -200,12 +226,13 @@ public class Storage extends Article {
      * Return article String*/
     public String selectArticle(String _title) {
         String theStrArticle  = "";
-        /**String gonna be the title as key, Integer gonna be the index of that title in array.
-         * def loadfactor 0.7f*/
+        /*String gonna be the title as key, Integer gonna be the index of that title in array.
+         * def loadfactor 0.7f
+         */
         Map<String, Integer> articleIndex = new HashMap<String, Integer>();
 
-        for (int i = 0; i < favoriteArray.size(); i++) {                                                                //looping any indexing title of article in favoriteArray
-            String currentIndexTitle = favoriteArray.get(i).getTitle();
+        for (int i = 0; i < this.favoriteArray.size(); i++) {                                                                //looping any indexing title of article in favoriteArray
+            String currentIndexTitle = this.favoriteArray.get(i).getTitle();
             articleIndex.put(currentIndexTitle, i);                                                                     //put current pair ("title", index) into the map
           }
         if (articleIndex.containsKey(_title)) {                                                                         //checking existence of article
