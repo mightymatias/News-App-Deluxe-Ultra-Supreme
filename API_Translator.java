@@ -12,57 +12,135 @@ import java.net.*;
 import java.util.ArrayList;
 import org.json.*;
 
-
 public class API_Translator {
 
-    //The API key for the NewsAPI.
-    private final String apiKey = "061df24bf9374cc9a4d897e1655b7aee";
+    private final String API_KEY = "061df24bf9374cc9a4d897e1655b7aee";
 
-    //The prefix used for all API calls.
-    private final String apiPrefix = "&apiKey=";
+    private final String API_PREFIX = "&apiKey=";
 
-    //The base url which is used for all calls.
-    private final String baseUrl = "https://newsapi.org/v2/";
+    private final String BASE_URL = "https://newsapi.org/v2/";
 
-    /**
+    /** Start of API connection
+     * A method that connects to the API using a given URL, and returns a string containing data from the given URL.
+     * @param _urlString The URL to connect to.
+     * @return A StringBuilder object containing the results of the URL connection.
+     */
+    public StringBuilder connectAndReturnContents(String _urlString) {
+        try {
+            //Make the connection.
+            URL url = new URL(_urlString);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+
+            //Examine the response code.
+            int status = con.getResponseCode();
+            if (status != 200) {
+                System.out.println("connection request failed");
+                return new StringBuilder("Error: API request failed." +
+                        " Status: ").append(status);
+            } else {
+                //Parse input stream into a text string.
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder content = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                //Close the connection.
+                in.close();
+                con.disconnect();
+                return content;
+            }
+        } catch (Exception e) {
+            return new StringBuilder("Error: ").append(e);
+        }
+
+    }
+    /**END of API connection*/
+
+    /**Start of Searching methods
+
      * Method that retrieves the top headlines for a certain country.
+     *
      * @param _country The country to get the top headlines for.
      * @return A JSON Object containing all the top headlines for a certain country.
      */
-    protected JSONObject getAllTopHeadlinesForCountry(String _country){
+
+    /*  Matias Search by country
+     *   Supported 54 countries
+     * */
+    public JSONObject sortByCountry(String _country) {
         String cleanCountry = _country.toLowerCase();
         String callAction = "top-headlines?country=";
-        String urlString = baseUrl + callAction + cleanCountry + apiPrefix + apiKey;
+        String urlString = BASE_URL + callAction + cleanCountry + API_PREFIX + API_KEY;
 
         StringBuilder content = connectAndReturnContents(urlString);
 
-        try{
+        try {
             return new JSONObject(content.toString());
 
         } catch (Exception e) {
-            System.out.println("****Error: " + e.toString());
+            System.out.println("Error: " + e.toString());
 
         }
         return new JSONObject();
     }
 
-    /**
-     * This class gets the top headlines for a particular category.
-     * @param _category the category of headlines to get.
-     * @return a JSON object containing the top headlines for that category.
-     */
-    protected JSONObject getAllTopHeadlinesForCategory(String _category){
+    /*  Matias Search by category
+     *   Supported possible categories are business, entertainment, general, health, science, sports, technology.
+     * */
+    public JSONObject sortByCategory(String _category) {
         String cleanCategory = _category.toLowerCase();
         String callAction = "top-headlines?country=us&category=";
-        String urlString = baseUrl + callAction + cleanCategory + apiPrefix + apiKey;
+        String urlString = BASE_URL + callAction + cleanCategory + API_PREFIX + API_KEY;
 
         StringBuilder content = connectAndReturnContents(urlString);
 
-        try{
+        try {
             return new JSONObject(content.toString());
 
         } catch (Exception e) {
-            System.out.println("***Error: " + e);
+            System.out.println("Error: " + e);
+        }
+
+        return new JSONObject();
+    }
+
+    /*  Quan Dinh Search by keyword
+     *   Supported single keyword and multiple keywords
+     * */
+    public JSONObject sortByKeyword(String _keyword) {
+        String cleanKw = _keyword.replaceAll("\\s", "_").toLowerCase();
+        String callAction = "top-headlines?q=";
+        String urlString = BASE_URL + callAction + cleanKw + API_PREFIX + API_KEY;
+
+        StringBuilder content = connectAndReturnContents(urlString);
+
+        try {
+            return new JSONObject(content.toString());
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+
+        return new JSONObject();
+    }
+
+    /* Quan Dinh Search by domain
+     *   NOTE: the domain is the name part only, example: www.facebook.com the input will be facebook
+     * */
+    public JSONObject sortByDom(String _domainName) {
+        String cleanDom = _domainName.toLowerCase();
+        String callAction = "top-headlines?domains=";
+        String urlString = BASE_URL + callAction + cleanDom + ".com" + API_PREFIX + API_KEY;
+
+        StringBuilder content = connectAndReturnContents(urlString);
+
+        try {
+            return new JSONObject(content.toString());
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
 
         return new JSONObject();
@@ -76,15 +154,15 @@ public class API_Translator {
     protected ArrayList<Article> getArrayListOfArticlesFromJSONObject(JSONObject _object){
         ArrayList<Article> articleArrayList = new ArrayList<>();
         try {
-            for (int i = 0; i < getLengthOfJSONObjectArticleArray(_object); i++){
+            for (int i = 1; i <= _object.getJSONArray("articles").length(); i++){
                 articleArrayList.add(getSpecificArticleFromJSON(_object, i));
             }
         } catch (Exception e){
-            System.out.println("*Error: " + e);
+            System.out.println("Error: " + e);
         }
         return articleArrayList;
     }
-
+  
     /**
      * A method that connects to the API using a given URL, and returns a string containing data from the given URL.
      * @param _urlString The URL to connect to.
@@ -119,7 +197,6 @@ public class API_Translator {
         } catch (Exception e){
             return new StringBuilder("*****Error: ").append(e);
         }
-
     }
 
     /**
