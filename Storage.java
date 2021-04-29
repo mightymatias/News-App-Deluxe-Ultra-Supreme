@@ -59,10 +59,20 @@ public class Storage extends Article {
 
     /**
      * This method adds an Article object to favoriteArray.
-     * @param article The Article object to add.
+     * @param _article The Article object to add.
      */
-    protected void newFavorite(Article article){
-        this.favoriteArray.add(article);
+    protected void newFavorite(Article _article){
+        _article.setIsFavorited(true);
+        this.favoriteArray.add(_article);
+    }
+
+    /**
+     * This method removes an Article object from favoriteArray.
+     * @param _article The Article object to remove.
+     */
+    protected void removeFavorite(Article _article){
+        _article.setIsFavorited(false);
+        this.favoriteArray.remove(_article);
     }
 
     /**
