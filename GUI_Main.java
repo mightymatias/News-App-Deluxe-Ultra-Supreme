@@ -60,11 +60,15 @@ public class GUI_Main extends Application {
     // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
     // th, tr, tw, ua, us, ve, za]
     final static String[] countries = new String[]{
-            "ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu",
-            "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk",
-            "th", "tr", "tw", "ua", "us", "ve", "za"
+            "ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch",
+            "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr",
+            "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr",
+            "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz",
+            "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg",
+            "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"
     };
 
+    //Creates main stage for the GUI so that all methods are using the same stage and not making a new stage each time
     final Stage stage = new Stage();
 
     /**
@@ -87,6 +91,9 @@ public class GUI_Main extends Application {
         guiDisplay();
     }
 
+    /**
+     * Method to get all favorites to display them
+     */
     public void viewFavorites() {
         primeArrayLists(favoriteStorage.favoriteArray);
 
@@ -156,16 +163,6 @@ public class GUI_Main extends Application {
 
         roo.setTop(menuBar);
         roo.setCenter(Ind);
-
-        //Adds components to group to be displayed
-        //root.getChildren().addAll(Ind, vb);
-
-
-
-        //creates main scene to display articles
-        //Scene sceneMenu = new Scene(root, 1600, 800);
-
-
 
         //sets the stage to be scene and sets background color
         stage.setScene(sc);
@@ -294,11 +291,9 @@ public class GUI_Main extends Application {
             favButton.setOnAction((ActionEvent z) -> {
                 if(articleList.get(finalI).getIsFavorited() == false) {
                     favoriteStorage.newFavorite(articleList.get(finalI));
-//                    System.out.println(articleList.get(finalI).getIsFavorited());
                     favButton.setText("Unfavorite");
                 } else if(articleList.get(finalI).getIsFavorited() == true) {
                     favoriteStorage.removeFavorite(articleList.get(finalI));
-//                    System.out.println(articleList.get(finalI).getIsFavorited());
                     favButton.setText("Favorite");
                 }
             });
@@ -406,6 +401,9 @@ public class GUI_Main extends Application {
         stage.show();
     }
 
+    /**
+     * Creates GUI to display favorited articles that have been saved
+     */
     public void favoriteDisplay() {
         //Creates scrollpane object and image objects
         ScrollPane sp = new ScrollPane();
@@ -517,13 +515,13 @@ public class GUI_Main extends Application {
 
             favButton.setOnAction((ActionEvent z) -> {
                 if(articleList.get(finalI).getIsFavorited() == true) {
-                    favoriteStorage.newFavorite(articleList.get(finalI));
-                    System.out.println(articleList.get(finalI).getIsFavorited());
-                    favButton.setText("Unfavorite");
-                } else if(articleList.get(finalI).getIsFavorited() == false) {
                     favoriteStorage.removeFavorite(articleList.get(finalI));
                     System.out.println(articleList.get(finalI).getIsFavorited());
                     favButton.setText("Favorite");
+                } else if(articleList.get(finalI).getIsFavorited() == false) {
+                    favoriteStorage.newFavorite(articleList.get(finalI));
+                    System.out.println(articleList.get(finalI).getIsFavorited());
+                    favButton.setText("Unfavorite");
                 }
             });
 
@@ -632,7 +630,7 @@ public class GUI_Main extends Application {
 
     /**
      * Starts program
-     * @param args System arguements.
+     * @param args System arguments.
      */
     public static void main(String[] args) {
         favoriteStorage.initializeStorage();
