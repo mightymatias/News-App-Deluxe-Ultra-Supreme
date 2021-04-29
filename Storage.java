@@ -141,12 +141,12 @@ public class Storage extends Article {
     }
 
 
-    //==============UNTESTED CODE====================
+    //==============Quan's TESTED CODE ====================
 
-
+    /**Modification Phase*/
     /**
-     * QUAN YOU NEED TO WRITE THE PURPOSE OF THIS METHOD HERE
-     * @throws IOException YOU NEED TO WRITE WHY THIS THROWS AN EXCEPTION HERE
+     * The Purpose of this method is to clear the storage beforer reloaded it with modified data
+     * @throws IOException in case file not exist
      */
     public void clearStorage() throws IOException {
         FileWriter fw = new FileWriter("FavoriteArticles.txt", false);
@@ -154,105 +154,109 @@ public class Storage extends Article {
         fw.close();
     }
 
-    /**
-     * This method deletes an Article object from favoriteArray based on title.
+    /** Delete from DB
+     /** @paramm _title might be getting from Article.getTitle
+     * @throws IOException in case file not exist
      * Using hashmap to search for that article index in the array
-     * After that remove it from running Array before update storage
-     * @param _title the title of the article to delete
-     */
-    public void deleteArticle (String _title) {
-        //String gonna be the title as key, Integer gonna be the index of that title in array.*/
-        // def loadfactor 0.7f*/
+     * After that remove it from running Array before update storage*/
+    public void deleteArticle (String _title) throws IOException {
+        /**String gonna be the title as key, Integer gonna be the index of that title in array.*/
+        /** def loadfactor 0.7f*/
         Map<String, Integer> articleIndex = new HashMap<String, Integer>();
 
-        for (int i = 0; i < this.favoriteArray.size(); i++) {                                        // looping any indexing title of article in favoriteArray*/
-            String currentIndexTitle = this.favoriteArray.get(i).getTitle();
+        for (int i = 0; i < favoriteArray.size(); i++) {                                                                // looping any indexing title of article in favoriteArray
+            String currentIndexTitle = favoriteArray.get(i).getTitle();
             int indexValue = i;
-            articleIndex.put(currentIndexTitle, indexValue);                                    //put current pair ("title", index) into the map*/
+            articleIndex.put(currentIndexTitle, indexValue);                                                            // put current pair ("title", index) into the map
         }
 
-        if (articleIndex.containsKey(_title)) {                                                 //checking existence of article*/
-            int getIndex = articleIndex.get(_title);                                            // getting the index from given title*/
-            this.favoriteArray.remove(getIndex);
+        if (articleIndex.containsKey(_title)) {                                                                         // checking existence of article
+            int getIndex = articleIndex.get(_title);                                                                    // getting the index from given title
+            favoriteArray.remove(getIndex);
             System.out.println("Article has been removed from your favorite list.");
         }
         else
         {
             System.out.println("The article you are looking for is not exist!");
         }
-    }
-  
-  private void delete(int x) {
-        try {
-            Scanner input = new Scanner(System.in);
-            System.out.println("Enter a positive number");
-            if (x < 0) {
-                System.out.println("Error number is negative: ");
+        updateStorage();
 
-            } else if (x > this.favoriteArray.toArray().length) {
-                System.out.println("Error number is bigger than users list: ");
-            } else {
-                this.favoriteArray.remove(x);
-            }
-        } catch (Exception e) {
-            System.out.println("Error with Storage.delete: " + e);
-            e.printStackTrace();
-        }
-        saveArrayToFile();
     }
-  
 
-  
-  /** Clear the current txt file and reload into it with new list from the arraylist*/
+    /** This method purpose is to use whenever you finish with modifying database and want to save it
+     * @throws IOException in case file not exist
+     * */
     public void updateStorage() throws IOException {
         clearStorage();
         FileWriter textLoader = new FileWriter("FavoriteArticles.txt", true);
-        for (int i  = 0; i < this.favoriteArray.size(); i++) {                                       /**toString each article in the favoriteArray then add it into the DB*/
-            String theArticle = this.favoriteArray.get(i).toString();
+        for (int i  = 0; i < favoriteArray.size(); i++) {                                                               // toString each article in the favoriteArray then add it into the DB
+            String theArticle = favoriteArray.get(i).toString();
             textLoader.append(theArticle);
         }
         textLoader.close();
     }
 
-    /** Add a new article to theDataArray (line 11) but this time require an Article Obj*/
+
+
+    /** The purpose of this is to add a new article to theDataArray (line 11) but this time require an Article Obj
+     * also prevent adding duplicate article to the array.
+     * @param _article is the selected article that user want to add into favorite list
+     * */
     public void addArticle(Article _article)
     {
-        this.favoriteArray.add(_article);
+        if (selectArticle(_article.getTitle()) != -1)
+            System.out.println("Trying to add article but it is already exist! Skip forward");
+        else
+            favoriteArray.add(_article);
     }
 
     /**Support method*/
-    /**Select article from storage
-     * Require title name String
-     * Return article String*/
-    public String selectArticle(String _title) {
-        String theStrArticle  = "";
-        /*String gonna be the title as key, Integer gonna be the index of that title in array.
-         * def loadfactor 0.7f
-         */
+    /**The purpose of this methods is search for an article to see if it exist or not
+     * if yes return its index in the ArrayList
+     * Otherwise, return -1 to check at call.
+     * @param  _title is require to search for the article in the Array as a keyword
+     * this can be acquired by Article.getTitle() or hand type or String input
+     * */
+    public int selectArticle(String _title) {
+        /**String gonna be the title as key, Integer gonna be the index of that title in array.
+         * def loadfactor 0.7f*/
+        int getIndex = -1;
         Map<String, Integer> articleIndex = new HashMap<String, Integer>();
 
-        for (int i = 0; i < this.favoriteArray.size(); i++) {                                                                //looping any indexing title of article in favoriteArray
-            String currentIndexTitle = this.favoriteArray.get(i).getTitle();
+        for (int i = 0; i < favoriteArray.size(); i++) {                                                                //looping any indexing title of article in favoriteArray
+            String currentIndexTitle = favoriteArray.get(i).getTitle();
             articleIndex.put(currentIndexTitle, i);                                                                     //put current pair ("title", index) into the map
-          }
-        if (articleIndex.containsKey(_title)) {                                                                         //checking existence of article
-            int getIndex = articleIndex.get(_title);                                                                    //getting the index from given title
-            System.out.println("Article found!");
-            theStrArticle = favoriteArray.get(getIndex).toString();
-            System.out.println(theStrArticle);
-        } else
-        {
-            System.out.println("The article you are looking for is not exist!");
         }
-        return theStrArticle;
+        if (articleIndex.containsKey(_title)) {                                                                         //checking existence of article
+            getIndex= articleIndex.get(_title);
+            return getIndex;                                                                                            //getting the index from given title
+        }
+        else
+        {
+            return getIndex;
+        }
+
     }
 
-    /**View saved favorite articles*/
+    /**View selected article
+     * the purpose for this methods is to see the article at @param index of the ArrayList of the favorite Article
+     * @param index get index of the article
+     * return print the article*/
+    public void viewSelectedArticle(int index)
+    {
+        System.out.println(favoriteArray.get(index).toString());
+    }
+
+    /**View saved favorite articles
+     * The purpose of this method is to see all saved articles in favorite list
+     * */
     public void viewArticles() {
         for (int i = 0; i < favoriteArray.size(); i++)
         {
             System.out.println("Article #" + i + ":\n" + favoriteArray.get(i));
         }
     }
+
 }
+
 
