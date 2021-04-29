@@ -1,9 +1,9 @@
 /*
-Last update: 16 April 2021
+Last update: 29 April 2021
 
 The main method of the project
 
-Contributing authors: Austin Matias
+Contributing authors: Austin Matias,Dillon Halbert
  */
 
 import org.json.JSONObject;
@@ -57,53 +57,52 @@ public class Main {
 
     }
 
+    /**
+     * In this method the User enters 2 lower case letters indicating a country then it takes that data and inputs it into the article class
+     */
     public static void topCountryHeadlines(){
+
         int i;
         String[] topCountryList={"ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"};
-
-        //possible country tags not yet implemented
-        //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
-        // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
-        // th, tr, tw, ua, us, ve, za]
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter the country you'd like!");
         String country = in.next();
         for(i=0;i<topCountryList.length;i++){
             if (country.equals(topCountryList[i])){
-                     //GUIMain.country;     method doesn't exist. commented it out until I find out who/why
+                API_Translator translator = new API_Translator();
+                JSONObject topUSHeadlines = translator.sortByCountry(country);
+                printArticles(topUSHeadlines);
             }
             else{
-               //GUIMain.errorCountry;      method doesn't exist. commented it out until I find out who/why
+                System.out.println("Error, topCountryHeadlines input failed");
+              topCategoryHeadlines();
             }
         }
-
-        API_Translator translator = new API_Translator();
-
-        JSONObject topUSHeadlines = translator.sortByCountry(country);
-        printArticles(topUSHeadlines);
     }
 
+    /**
+     * User enters a category and then it searches based off that keyword.
+     */
     public static void topCategoryHeadlines(){
 
         int i;
         String[] topCategoriesList= {"business","entertainment", "general","health", "science", "sports", "technology"};
-        //possible category tags not yet implemented
-        //possible categories are business, entertainment, general, health, science, sports, technology.
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter the category you'd like!");
         String category = in.next();
         for(i=0;i<topCategoriesList.length;i++){
             if(category.equals(topCategoriesList[i])){
-                //GUIMain.category;         method doesn't exist. commented it out until I find out who/why
+                API_Translator translator = new API_Translator();
+
+                JSONObject topCategoryHeadlines = translator.sortByCategory(category);
+                printArticles(topCategoryHeadlines);
             }
             else{
-                //GUIMain.errorCategory;    method doesn't exist. commented it out until I find out who/why
+                System.out.println("Error, topCategoryHeadlines input failed");
+                topCountryHeadlines();
             }
         }
 
-        API_Translator translator = new API_Translator();
 
-        JSONObject topCategoryHeadlines = translator.sortByCategory(category);
-        printArticles(topCategoryHeadlines);
     }
 }
