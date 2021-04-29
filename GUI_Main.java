@@ -79,14 +79,16 @@ public class GUI_Main extends Application {
         JSONObject topHeadlines = translator.sortByCountry(country);
         this.articleList = translator.getArrayListOfArticlesFromJSONObject(topHeadlines);
 
-//        for (int i = 0; i < articleArrayList.toArray().length; i++){
-//            favoriteStorage.newFavorite(articleArrayList.get(i));
-//        }
-
         primeArrayLists(articleList);
 
         //Loads gui
         guiDisplay();
+    }
+
+    public void viewFavorites() {
+        primeArrayLists(favoriteStorage.favoriteArray);
+
+        favoriteDisplay();
     }
 
     /**
@@ -97,6 +99,11 @@ public class GUI_Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        BorderPane roo = new BorderPane();
+        Scene sc = new Scene(roo, 1600, 800);
+
+
+
         //VBox object for various things
         VBox vb = new VBox();
 
@@ -106,6 +113,12 @@ public class GUI_Main extends Application {
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
         Menu menuSettings = new Menu("Settings");
+
+        MenuItem viewFavorites = new MenuItem("View Favorites");
+        viewFavorites.setOnAction((ActionEvent v) -> {
+            viewFavorites();
+        });
+
         Menu country = new Menu("Country");
 
         //Country selection
@@ -127,30 +140,38 @@ public class GUI_Main extends Application {
             System.exit(0);
         });
 
-        menuSettings.getItems().addAll(country, exit);
+        menuBar.prefHeightProperty().bind(primaryStage.widthProperty());
+        menuSettings.getItems().addAll(viewFavorites, country, exit);
         menuBar.getMenus().addAll(menuSettings);
 
         //Progress indicator
         ProgressIndicator PI = new ProgressIndicator();
-        final VBox Ind = new VBox();
+        HBox Ind = new HBox();
         Ind.getChildren().addAll(PI);
         Ind.setSpacing(5);
         Ind.setPadding(new Insets(10, 10, 10, 10));
         Ind.setAlignment(Pos.CENTER);
 
+        roo.setTop(menuBar);
+        roo.setCenter(Ind);
+
         //Adds components to group to be displayed
-        root.getChildren().addAll(vb, Ind, menuBar);
+        //root.getChildren().addAll(Ind, vb);
+
+
 
         //creates main scene to display articles
-        Scene sceneMenu = new Scene(root, 1600, 800);
+        //Scene sceneMenu = new Scene(root, 1600, 800);
+
+
 
         //sets the stage to be scene and sets background color
-        stage.setScene(sceneMenu);
+        stage.setScene(sc);
         stage.setTitle("NADUS");
-        sceneMenu.setFill(Color.WHITE);
+        sc.setFill(Color.WHITE);
 
         //generates stage
-        stage.setScene(sceneMenu);
+        stage.setScene(sc);
         stage.show();
     }
 
@@ -158,6 +179,8 @@ public class GUI_Main extends Application {
      * Creates main GUI to display
      */
     public void guiDisplay() {
+//        BorderPane bp = new BorderPane();
+
         //Creates scrollpane object and image objects
         ScrollPane sp = new ScrollPane();
 
@@ -175,6 +198,12 @@ public class GUI_Main extends Application {
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
         Menu menuSettings = new Menu("Settings");
+
+        MenuItem viewFavorites = new MenuItem("View Favorites");
+        viewFavorites.setOnAction((ActionEvent v) -> {
+            viewFavorites();
+        });
+
         Menu country = new Menu("Country");
 
         //Country selection
@@ -198,7 +227,7 @@ public class GUI_Main extends Application {
             System.exit(0);
         });
 
-        menuSettings.getItems().addAll(country, exit);
+        menuSettings.getItems().addAll(viewFavorites, country, exit);
         menuBar.getMenus().addAll(menuSettings);
 
         //Creates webview and webengine to display articles
@@ -255,16 +284,241 @@ public class GUI_Main extends Application {
             hbWeb.setAlignment(Pos.BASELINE_CENTER);
             hbWeb.getChildren().addAll(hpls);
 
+            int finalI = i;
+
             //Creates favorite button to favorite or unfavorite articles
             Button favButton = new Button("Favorite");
 
-            int finalI = i;
             favButton.setOnAction((ActionEvent z) -> {
                 if(articleList.get(finalI).getIsFavorited() == false) {
                     favoriteStorage.newFavorite(articleList.get(finalI));
-                    System.out.println(articleList.get(finalI).getIsFavorited());
+//                    System.out.println(articleList.get(finalI).getIsFavorited());
                     favButton.setText("Unfavorite");
                 } else if(articleList.get(finalI).getIsFavorited() == true) {
+                    favoriteStorage.removeFavorite(articleList.get(finalI));
+//                    System.out.println(articleList.get(finalI).getIsFavorited());
+                    favButton.setText("Favorite");
+                }
+            });
+
+            //Displays various article attributes
+            Text title = new Text(GUI_Main.title.get(i));
+            title.setFont(new Font("Verdana Bold",  20));
+
+            //Checks if author is provided
+            Text auth;
+            if(author.get(i) != "null") {
+                auth = new Text(author.get(i));
+                auth.setFont(new Font("Arial Italic", 14));
+            } else {
+                auth = new Text("Not Provided");
+                auth.setFont(new Font("Arial Italic", 14));
+            }
+
+            //Checks how long the description is and puts it on two lines if it is too long
+            int length = summary.get(i).length();
+            String sum = summary.get(i);
+            String printDescription;
+            StringBuilder description = new StringBuilder();
+
+            int spaceAdded = 0;
+
+            //Checks how long the description is and puts it on two lines if it is too long
+            if(length > 100) {
+                for (int j = 0; j < length; j++) {
+                    description.append(sum.charAt(j));
+                    if (j > (length / 2) & spaceAdded == 0 & sum.charAt(j) == ' ') {
+                        spaceAdded = 1;
+                        description.append("\n");
+                    }
+                }
+
+                //Converts stringbuilder to string so it can be converted to a text object
+                printDescription = description.toString();
+            } else {
+                printDescription = summary.get(i);
+            }
+
+
+            //Checks if description is provided
+            Text desc;
+            if(summary.get(i) != "null") {
+                desc = new Text(printDescription);
+                desc.setFont(new Font("Arial", 16));
+            } else {
+                desc = new Text("Not Provided");
+                desc.setFont(new Font("Arial", 16));
+            }
+
+            //Allows for reasonable spacing between article objects
+            Text blank = new Text("\n\n");
+
+            //Adjusts picture size
+            pic.setFitHeight(300);
+            pic.setFitWidth(534);
+            pic.setEffect(shadow);
+
+            //Drop shadow modifiers
+            shadow.setColor(Color.GREY);
+            shadow.setOffsetX(2);
+            shadow.setOffsetY(2);
+
+            //Adds all article pieces to scene and aligns it
+            vb.getChildren().addAll(pic, title, auth, desc, hpl, favButton, blank);
+            vb.setPadding(new Insets(30,0,10,0));
+            vb.setAlignment(Pos.TOP_CENTER);
+
+        }
+
+        //Scrollbar, menubar, and article components are added to a single group to be passed to the scene
+        root.getChildren().addAll(vb, sp, menuBar);
+
+        //Creates main scene to display articles
+        Scene scene = new Scene(root, 1600, 800);
+
+        //Text object to create proper spacing between return button and web object
+        Text blank = new Text("\n\n");
+
+        //Button to bring you back to article scene
+        Button button = new Button("  Return  ");
+        button.setOnAction((ActionEvent e) -> {
+            stage.setScene(scene);
+        });
+
+        //Generates vbox object for web elements and sets proper spacing
+        vbWeb.getChildren().addAll(button, blank);
+        vbWeb.getChildren().addAll(hbWeb, browser);
+        vbWeb.setAlignment(Pos.TOP_CENTER);
+        vbWeb.setPadding(new Insets(20,0,10,0));
+        VBox.setVgrow(browser, Priority.ALWAYS);
+        webRoot.getChildren().addAll(vbWeb);
+        webRoot.setAutoSizeChildren(true);
+
+        //Sets the stage to be scene and sets background color
+        stage.setScene(scene);
+        stage.setTitle("NADUS");
+        scene.setFill(Color.WHITE);
+
+        //Generates stage
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void favoriteDisplay() {
+        //Creates scrollpane object and image objects
+        ScrollPane sp = new ScrollPane();
+
+        //VBox objects for various things
+        VBox vb = new VBox();
+        VBox vbWeb = new VBox();
+
+        //Creates object groups for various GUI components
+        Group root = new Group();
+        Group webRoot = new Group();
+
+        //Scene for the webview [Under Construction]
+        Scene webScene = new Scene(webRoot, 1600, 900);
+
+        //Menubar component creation
+        MenuBar menuBar = new MenuBar();
+        Menu menuSettings = new Menu("Settings");
+
+        MenuItem viewFavorites = new MenuItem("View Favorites");
+        viewFavorites.setOnAction((ActionEvent v) -> {
+            viewFavorites();
+        });
+
+        Menu country = new Menu("Country");
+
+        //Country selection
+        for(int a = 0; countries.length > a; a++){
+            MenuItem subCountry = new MenuItem(countries[a]);
+            int finalA = a;
+
+            //Adds article info to arrays to be displayed
+            subCountry.setOnAction((ActionEvent f) -> {
+                info(countries[finalA]);
+                root.getChildren().clear();
+                webRoot.getChildren().clear();
+            });
+            country.getItems().add(subCountry);
+        }
+
+        //Adds button to exit program
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction((ActionEvent t) -> {
+            favoriteStorage.saveArrayToFile();
+            System.exit(0);
+        });
+
+        menuSettings.getItems().addAll(viewFavorites, country, exit);
+        menuBar.getMenus().addAll(menuSettings);
+
+        //Creates webview and webengine to display articles
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+
+        //Resizes browser to fit window
+        browser.prefHeightProperty().bind(stage.heightProperty());
+        browser.prefWidthProperty().bind(stage.widthProperty());
+
+        //Creates HBox for web content
+        HBox hbWeb = new HBox();
+
+        //Scrollpane properties
+        sp.fitToHeightProperty().set(true);
+        sp.setFitToHeight(true);
+        sp.setFitToWidth(true);
+        sp.setContent(vb);
+        sp.setHbarPolicy((ScrollPane.ScrollBarPolicy.NEVER));
+        sp.setVmax(800);
+        sp.setPrefSize(1600, 800);
+        sp.pannableProperty().set(true);
+
+        //Loop that pushes all of the article information to the GUI
+        for(int i = 0; i < (imageURL.toArray().length); i++) {
+
+            //Allows the images to be displayed
+            final Image image;
+            final ImageView pic;
+
+            //Placeholder image in case image url is not provided for an article
+            final String placeholder = "http://www.bobos.it/new/wp-content/uploads/2017/11/tv-noise-0212-retro-tv-color-bars-loop_4yiztcvfg__F0000.png";
+
+            //Checks to make sure url is provided
+            if(imageURL.get(i) != "null") {
+                image = new Image(imageURL.get(i));
+                pic = new ImageView(image);
+            } else {
+                image = new Image(placeholder);
+                pic = new ImageView(image);
+            }
+
+            //Creates button to view the article
+            final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
+            final String url = URL.get(i);
+
+            //Creates hyperlink button that opens article website and article page
+            hpl.setOnAction((ActionEvent e) -> {
+                webEngine.load(url);
+                stage.setScene(webScene);
+            });
+
+            //Aligns webengine
+            hbWeb.setAlignment(Pos.BASELINE_CENTER);
+            hbWeb.getChildren().addAll(hpls);
+
+            int finalI = i;
+
+            //Creates favorite button to favorite or unfavorite articles
+            Button favButton = new Button("Unfavorite");
+
+            favButton.setOnAction((ActionEvent z) -> {
+                if(articleList.get(finalI).getIsFavorited() == true) {
+                    favoriteStorage.newFavorite(articleList.get(finalI));
+                    System.out.println(articleList.get(finalI).getIsFavorited());
+                    favButton.setText("Unfavorite");
+                } else if(articleList.get(finalI).getIsFavorited() == false) {
                     favoriteStorage.removeFavorite(articleList.get(finalI));
                     System.out.println(articleList.get(finalI).getIsFavorited());
                     favButton.setText("Favorite");
