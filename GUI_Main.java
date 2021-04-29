@@ -6,6 +6,7 @@ The main class that runs the GUI for the News App.
 Contributing authors: Connor Contursi, Austin Matias
  */
 
+import com.sun.javaws.progress.Progress;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import javafx.scene.control.ProgressIndicator;
 
 public class GUI_Main extends Application {
 
@@ -40,12 +42,15 @@ public class GUI_Main extends Application {
     private static ArrayList<String> URL = new ArrayList<>();
     private static ArrayList<String> imageURL = new ArrayList<>();
 
-    //Creates scrollpane object and image objects
+    //True or false array for whether or not an article has been favorited
+    private static ArrayList<Boolean> favorite = new ArrayList<>();
+
+    /*//Creates scrollpane object and image objects
     final ScrollPane sp = new ScrollPane();
 
     //VBox objects for various things
     final VBox vb = new VBox();
-    final VBox vbWeb = new VBox();
+    final VBox vbWeb = new VBox();*/
 
     //Drop shadow for pictures
     DropShadow shadow = new DropShadow();
@@ -58,15 +63,23 @@ public class GUI_Main extends Application {
     //hyperlink creation for articles
     final Hyperlink[] hpls = new Hyperlink[captions.length];
 
+    final static String[] countries = new String[]{
+            "ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu",
+            "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk",
+            "th", "tr", "tw", "ua", "us", "ve", "za"
+    };
+
+    final Stage stage = new Stage();
+
     /*
     Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
     */
-    public void info(){
+    public void info(String cou){
         //possible country tags not yet implemented
         //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
         // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
         // th, tr, tw, ua, us, ve, za]
-        String country = "us";
+        String country = cou;
 
         API_Translator translator = new API_Translator();
 
@@ -79,6 +92,7 @@ public class GUI_Main extends Application {
         }
 
         primeArrayLists(articleArrayList);
+        guiDisplay();
     }
 
     /*
@@ -86,8 +100,78 @@ public class GUI_Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Adds article info to arrays to be displayed
-        info();
+        //Creates scrollpane object and image objects
+        ScrollPane sp = new ScrollPane();
+
+        //VBox objects for various things
+        VBox vb = new VBox();
+        //VBox vbWeb = new VBox();
+
+        //Creates object groups for various GUI components
+        Group root = new Group();
+        Group webRoot = new Group();
+
+        //Scene for the webview [Under Construction]
+        //Scene webScene = new Scene(webRoot, 1600, 900);
+
+        //Menubar component creation
+        MenuBar menuBar = new MenuBar();
+        Menu menuSettings = new Menu("Settings");
+        Menu country = new Menu("Country");
+
+        //Country selection
+        for(int a = 0; countries.length > a; a++){
+            MenuItem subCountry = new MenuItem(countries[a]);
+            int finalA = a;
+
+            //Adds article info to arrays to be displayed
+            subCountry.setOnAction((ActionEvent f) -> {
+                info(countries[finalA]);
+            });
+            country.getItems().add(subCountry);
+        }
+
+        //Menu button for exiting the program
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction((ActionEvent t) -> {
+            favoriteStorage.saveArrayToFile();
+            System.exit(0);
+        });
+
+        menuSettings.getItems().addAll(country, exit);
+        menuBar.getMenus().addAll(menuSettings);
+
+        //Progress indicator
+        ProgressIndicator PI = new ProgressIndicator();
+        final VBox Ind = new VBox();
+        Ind.getChildren().addAll(PI);
+        Ind.setSpacing(5);
+        Ind.setPadding(new Insets(10, 10, 10, 10));
+        Ind.setAlignment(Pos.CENTER);
+
+        //Adds components to group to be displayed
+        root.getChildren().addAll(vb, Ind, menuBar);
+
+        //creates main scene to display articles
+        Scene sceneMenu = new Scene(root, 1600, 800);
+
+        //sets the stage to be scene and sets background color
+        stage.setScene(sceneMenu);
+        stage.setTitle("NADUS");
+        sceneMenu.setFill(Color.WHITE);
+
+        //generates stage
+        stage.setScene(sceneMenu);
+        stage.show();
+    }
+
+    public void guiDisplay() {
+        //Creates scrollpane object and image objects
+        ScrollPane sp = new ScrollPane();
+
+        //VBox objects for various things
+        VBox vb = new VBox();
+        VBox vbWeb = new VBox();
 
         //Creates object groups for various GUI components
         Group root = new Group();
@@ -99,8 +183,23 @@ public class GUI_Main extends Application {
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
         Menu menuSettings = new Menu("Settings");
-        MenuItem country = new MenuItem("Country");
+        Menu country = new Menu("Country");
 
+        //Country selection
+        for(int a = 0; countries.length > a; a++){
+            MenuItem subCountry = new MenuItem(countries[a]);
+            int finalA = a;
+
+            //Adds article info to arrays to be displayed
+            subCountry.setOnAction((ActionEvent f) -> {
+                info(countries[finalA]);
+                root.getChildren().clear();
+                webRoot.getChildren().clear();
+            });
+            country.getItems().add(subCountry);
+        }
+
+        //Adds button to exit program
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction((ActionEvent t) -> {
             favoriteStorage.saveArrayToFile();
@@ -115,8 +214,8 @@ public class GUI_Main extends Application {
         final WebEngine webEngine = browser.getEngine();
 
         //resizes browser to fit window
-        browser.prefHeightProperty().bind(primaryStage.heightProperty());
-        browser.prefWidthProperty().bind(primaryStage.widthProperty());
+        browser.prefHeightProperty().bind(stage.heightProperty());
+        browser.prefWidthProperty().bind(stage.widthProperty());
 
         //creates HBox for web content
         HBox hbWeb = new HBox();
@@ -157,12 +256,22 @@ public class GUI_Main extends Application {
             //creates hyperlink button that opens article website and article page
             hpl.setOnAction((ActionEvent e) -> {
                 webEngine.load(url);
-                primaryStage.setScene(webScene);
+                stage.setScene(webScene);
             });
 
             //aligns webengine
             hbWeb.setAlignment(Pos.BASELINE_CENTER);
             hbWeb.getChildren().addAll(hpls);
+
+            String fav = "Favorite";
+            String unfav = "Unfavorite";
+
+            Button favButton;
+            if(1 == 1) {
+                favButton = new Button(unfav);
+            } else {
+                favButton = new Button(fav);
+            }
 
             //displays various article attributes
             Text title = new Text(article.get(i));
@@ -228,7 +337,7 @@ public class GUI_Main extends Application {
             shadow.setOffsetY(2);
 
             //Adds all article pieces to scene and aligns it
-            vb.getChildren().addAll(pic, title, auth, desc, hpl, blank);
+            vb.getChildren().addAll(pic, title, auth, desc, hpl, favButton, blank);
             vb.setPadding(new Insets(30,0,10,0));
             vb.setAlignment(Pos.TOP_CENTER);
 
@@ -246,7 +355,7 @@ public class GUI_Main extends Application {
         //button to bring you back to article scene
         Button button = new Button("  Return  ");
         button.setOnAction((ActionEvent e) -> {
-            primaryStage.setScene(scene);
+            stage.setScene(scene);
         });
 
         //generates vbox object for web elements and sets proper spacing
@@ -259,13 +368,13 @@ public class GUI_Main extends Application {
         webRoot.setAutoSizeChildren(true);
 
         //sets the stage to be scene and sets background color
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("NADUS");
+        stage.setScene(scene);
+        stage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
 
         //generates stage
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setScene(scene);
+        stage.show();
     }
 
     /*
