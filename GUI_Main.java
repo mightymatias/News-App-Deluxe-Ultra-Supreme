@@ -43,9 +43,6 @@ public class GUI_Main extends Application {
     private static ArrayList<String> URL = new ArrayList<>();
     private static ArrayList<String> imageURL = new ArrayList<>();
 
-    //True or false array for whether or not an article has been favorited
-    private static ArrayList<Boolean> favorite = new ArrayList<>();
-
     //Drop shadow for pictures
     DropShadow shadow = new DropShadow();
 
@@ -258,17 +255,24 @@ public class GUI_Main extends Application {
             hbWeb.setAlignment(Pos.BASELINE_CENTER);
             hbWeb.getChildren().addAll(hpls);
 
-            String fav = "Favorite";
-            String unfav = "Unfavorite";
+            //Label fav = new Label("Favorite");
+            //Label unfav = new Label("Unfavorite");
 
-            final Button[] favButton = {new Button(fav)};
+            //String fav = "Favorite";
+            //String unfav = "Unfavorite";
 
+            Button favButton = new Button("Favorite");
 
             int finalI = i;
-            favButton[0].setOnAction((ActionEvent t) -> {
-                favoriteStorage.newFavorite(articleList.get(finalI));
-                favButton[0] = new Button(unfav);
-            });
+            if(articleList.get(finalI).getIsFavorited() == false) {
+                favButton.setOnAction((ActionEvent t) -> {
+                    favoriteStorage.newFavorite(articleList.get(finalI));
+                    System.out.println(articleList.get(finalI).getIsFavorited());
+                    favButton.setText("Unfavorite");
+                });
+            } else if(articleList.get(finalI).getIsFavorited() == true) {
+                favButton.setText("Favorite");
+            }
 
             //Displays various article attributes
             Text title = new Text(GUI_Main.title.get(i));
@@ -333,7 +337,7 @@ public class GUI_Main extends Application {
             shadow.setOffsetY(2);
 
             //Adds all article pieces to scene and aligns it
-            vb.getChildren().addAll(pic, title, auth, desc, hpl, favButton[0], blank);
+            vb.getChildren().addAll(pic, title, auth, desc, hpl, favButton, blank);
             vb.setPadding(new Insets(30,0,10,0));
             vb.setAlignment(Pos.TOP_CENTER);
 
