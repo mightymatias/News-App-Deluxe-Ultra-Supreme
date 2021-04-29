@@ -67,6 +67,15 @@ public class Storage extends Article {
     }
 
     /**
+     * This method removes an Article object from favoriteArray.
+     * @param _article The Article object to remove.
+     */
+    protected void removeFavorite(Article _article){
+        _article.setIsFavorited(false);
+        this.favoriteArray.remove(_article);
+    }
+
+    /**
      * A method to ensure that the file to save favorites to exists, and create the file
      * if it doesn't exist.
      * @return A boolean that is true if the file exists. Should always return true.
