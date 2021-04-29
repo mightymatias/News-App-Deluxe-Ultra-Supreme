@@ -22,11 +22,11 @@ public class Storage {
     private String filePath = "FavoriteArticles.txt";
 
 
-    /**         HOW DOES THIS CLASS WORK? (BASIC)
-     *          First: Having an ArrayList of favorite Article and Check for existent of txt file (if not exist then create) (if exist then load data into an arraylist)
-     *          Second: (optional) to add an article to favorite                    use method  addArticle (Article _article)
-     *          Third:  (optional) to delete an article from the List               use method  deleteArticle (String _title)
-     *          Fourth: (optional) to select an article from the List               use method  selectArticle (String _title)
+    /**HOW DOES THIS CLASS WORK? (BASIC)
+     * First: Having an ArrayList of favorite Article and Check for existent of txt file (if not exist then create) (if exist then load data into an arraylist)
+     * Second: (optional) to add an article to favorite                    use method  newFavorite (Article _article)
+     * Third:  (optional) to delete an article from the List               use method  removeFavorite (Article _article)
+     * Fourth: (optional) to select an article from the List               use method  selectArticle (String _title)
      */
 
 
@@ -151,79 +151,8 @@ public class Storage {
         }
     }
 
-
-    //==============Quan's TESTED CODE ====================
-
-    /**Modification Phase*/
-    /**
-     * The Purpose of this method is to clear the storage beforer reloaded it with modified data
-     * @throws IOException in case file not exist
-     */
-    public void clearStorage() throws IOException {
-        FileWriter fw = new FileWriter("FavoriteArticles.txt", false);
-        fw.write("");
-        fw.close();
-    }
-
-    /** Delete from DB
-     /** @paramm _title might be getting from Article.getTitle
-     * @throws IOException in case file not exist
-     * Using hashmap to search for that article index in the array
-     * After that remove it from running Array before update storage*/
-    public void deleteArticle (String _title) throws IOException {
-        /**String gonna be the title as key, Integer gonna be the index of that title in array.*/
-        /** def loadfactor 0.7f*/
-        Map<String, Integer> articleIndex = new HashMap<String, Integer>();
-
-        for (int i = 0; i < favoriteArray.size(); i++) {                                                                // looping any indexing title of article in favoriteArray
-            String currentIndexTitle = favoriteArray.get(i).getTitle();
-            int indexValue = i;
-            articleIndex.put(currentIndexTitle, indexValue);                                                            // put current pair ("title", index) into the map
-        }
-
-        if (articleIndex.containsKey(_title)) {                                                                         // checking existence of article
-            int getIndex = articleIndex.get(_title);                                                                    // getting the index from given title
-            favoriteArray.remove(getIndex);
-            System.out.println("Article has been removed from your favorite list.");
-        }
-        else
-        {
-            System.out.println("The article you are looking for is not exist!");
-        }
-        updateStorage();
-
-    }
-
-    /** This method purpose is to use whenever you finish with modifying database and want to save it
-     * @throws IOException in case file not exist
-     * */
-    public void updateStorage() throws IOException {
-        clearStorage();
-        FileWriter textLoader = new FileWriter("FavoriteArticles.txt", true);
-        for (int i  = 0; i < favoriteArray.size(); i++) {                                                               // toString each article in the favoriteArray then add it into the DB
-            String theArticle = favoriteArray.get(i).toString();
-            textLoader.append(theArticle);
-        }
-        textLoader.close();
-    }
-
-
-
-    /** The purpose of this is to add a new article to theDataArray (line 11) but this time require an Article Obj
-     * also prevent adding duplicate article to the array.
-     * @param _article is the selected article that user want to add into favorite list
-     * */
-    public void addArticle(Article _article)
-    {
-        if (selectArticle(_article.getTitle()) != -1)
-            System.out.println("Trying to add article but it is already exist! Skip forward");
-        else
-            favoriteArray.add(_article);
-    }
-
-    /**Support method*/
-    /**The purpose of this methods is search for an article to see if it exist or not
-     * if yes return its index in the ArrayList
+    /**Support method
+    /**This methods search for an article to see if it exist or not if yes return its index in the ArrayList
      * Otherwise, return -1 to check at call.
      * @param  _title is require to search for the article in the Array as a keyword
      * this can be acquired by Article.getTitle() or hand type or String input
@@ -243,31 +172,16 @@ public class Storage {
             return getIndex;                                                                                            //getting the index from given title
         }
         else
-        {
             return getIndex;
-        }
-
     }
 
     /**View selected article
      * the purpose for this methods is to see the article at @param index of the ArrayList of the favorite Article
      * @param index get index of the article
      * return print the article*/
-    public void viewSelectedArticle(int index)
-    {
+    public void viewSelectedArticle(int index) {
         System.out.println(favoriteArray.get(index).toString());
     }
-
-    /**View saved favorite articles
-     * The purpose of this method is to see all saved articles in favorite list
-     * */
-    public void viewArticles() {
-        for (int i = 0; i < favoriteArray.size(); i++)
-        {
-            System.out.println("Article #" + i + ":\n" + favoriteArray.get(i));
-        }
-    }
-
 }
 
 
