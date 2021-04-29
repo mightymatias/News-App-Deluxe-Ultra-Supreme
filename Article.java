@@ -71,6 +71,8 @@ public class Article {
                 "\n" + this.publishedAt + "\n\n";
     }
 
+    protected void setIsFavorited(Boolean _state){this.isFavorited = _state;}
+
     //=================  GETTERS ===============
 
     public String getTitle() {
