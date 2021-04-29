@@ -32,6 +32,8 @@ import javafx.scene.control.ProgressIndicator;
 
 public class GUI_Main extends Application {
 
+    private static ArrayList<Article> articleList = new ArrayList<>();
+
     private static Storage favoriteStorage = new Storage();
 
     //Arrays for all of the data that will be processed
@@ -43,13 +45,6 @@ public class GUI_Main extends Application {
 
     //True or false array for whether or not an article has been favorited
     private static ArrayList<Boolean> favorite = new ArrayList<>();
-
-    /*//Creates scrollpane object and image objects
-    final ScrollPane sp = new ScrollPane();
-
-    //VBox objects for various things
-    final VBox vb = new VBox();
-    final VBox vbWeb = new VBox();*/
 
     //Drop shadow for pictures
     DropShadow shadow = new DropShadow();
@@ -73,44 +68,43 @@ public class GUI_Main extends Application {
 
     final Stage stage = new Stage();
 
-    /*
-    Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
-    */
+    /**
+     *     Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
+     * @param cou
+     */
     public void info(String cou){
         //Country that will be passed to API
         String country = cou;
 
         API_Translator translator = new API_Translator();
 
-        //gets all article information
+        //Gets all article information
         JSONObject topHeadlines = translator.sortByCountry(country);
-        ArrayList<Article> articleArrayList = translator.getArrayListOfArticlesFromJSONObject(topHeadlines);
+        this.articleList = translator.getArrayListOfArticlesFromJSONObject(topHeadlines);
 
 //        for (int i = 0; i < articleArrayList.toArray().length; i++){
 //            favoriteStorage.newFavorite(articleArrayList.get(i));
 //        }
 
-        primeArrayLists(articleArrayList);
+        primeArrayLists(articleList);
 
         //Loads gui
         guiDisplay();
     }
 
-    /*
-    Main GUI method that creates the entire GUI interface, including webengine
+    /**
+     *     Main GUI method that creates the entire GUI interface, including webengine
+     * @param primaryStage
+     * @throws Exception
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //Creates scrollpane object and image objects
-        ScrollPane sp = new ScrollPane();
 
-        //VBox objects for various things
+        //VBox object for various things
         VBox vb = new VBox();
-        //VBox vbWeb = new VBox();
 
         //Creates object groups for various GUI components
         Group root = new Group();
-        Group webRoot = new Group();
 
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
@@ -163,7 +157,9 @@ public class GUI_Main extends Application {
         stage.show();
     }
 
-
+    /**
+     * Creates main GUI to display
+     */
     public void guiDisplay() {
         //Creates scrollpane object and image objects
         ScrollPane sp = new ScrollPane();
@@ -265,12 +261,14 @@ public class GUI_Main extends Application {
             String fav = "Favorite";
             String unfav = "Unfavorite";
 
-            Button favButton;
-            if(1 == 1) {
-                favButton = new Button(unfav);
-            } else {
-                favButton = new Button(fav);
-            }
+            final Button[] favButton = {new Button(fav)};
+
+
+            int finalI = i;
+            favButton[0].setOnAction((ActionEvent t) -> {
+                favoriteStorage.newFavorite(articleList.get(finalI));
+                favButton[0] = new Button(unfav);
+            });
 
             //Displays various article attributes
             Text title = new Text(GUI_Main.title.get(i));
@@ -327,7 +325,6 @@ public class GUI_Main extends Application {
             //Adjusts picture size
             pic.setFitHeight(300);
             pic.setFitWidth(534);
-            //pic.setPreserveRatio(true);
             pic.setEffect(shadow);
 
             //Drop shadow modifiers
@@ -336,7 +333,7 @@ public class GUI_Main extends Application {
             shadow.setOffsetY(2);
 
             //Adds all article pieces to scene and aligns it
-            vb.getChildren().addAll(pic, title, auth, desc, hpl, favButton, blank);
+            vb.getChildren().addAll(pic, title, auth, desc, hpl, favButton[0], blank);
             vb.setPadding(new Insets(30,0,10,0));
             vb.setAlignment(Pos.TOP_CENTER);
 
@@ -377,7 +374,8 @@ public class GUI_Main extends Application {
     }
 
     /**
-    Starts program
+     *     Starts program
+     * @param args
      */
     public static void main(String[] args) {
         favoriteStorage.initializeStorage();
@@ -386,7 +384,8 @@ public class GUI_Main extends Application {
     }
 
     /**
-    Calls GUI_translator to get api article information
+     *     Calls GUI_translator to get api article information
+     * @param _articleList
      */
     public static void primeArrayLists(ArrayList<Article> _articleList){
         GUI_Translator guiTranslator = new GUI_Translator();
