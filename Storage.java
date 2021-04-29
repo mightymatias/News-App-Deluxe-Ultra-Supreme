@@ -1,5 +1,5 @@
 /*
-Last update: 27 April 2021.
+Last update: 29 April 2021.
 
 The Storage object contains method that manipulate persistent data storage.
 
@@ -13,12 +13,10 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Storage extends Article {
+public class Storage {
 
     //The ArrayList that the favorite articles are saved in while the program runs.
     protected ArrayList<Article> favoriteArray = new ArrayList<>();
-
-    protected int arrayCounter=0;
 
     //The file path for the file that will contain the favorite articles while the application is closed.
     private String filePath = "FavoriteArticles.txt";
@@ -103,8 +101,9 @@ public class Storage extends Article {
      */
     private void loadArray() {
         try {
+            //Create a scanner object with the text from the favorites file.
             Scanner input = new Scanner(new File(this.filePath));
-            //setting variables to be assigned to object
+            //Reading through the file, creating Article objects from the information contained in it.
             while (input.hasNextLine()) {
                 String title = input.nextLine();
                 String author = input.nextLine();
@@ -119,13 +118,14 @@ public class Storage extends Article {
             System.out.println("Error with Storage.loadArray: " + e);
             e.printStackTrace();
         }
-        System.out.println(this.favoriteArray);
     }
 
     /**
      * This method completely clears the favorites file.
      */
     private void clear() {
+        //Creates a new file object at the favorite file path, and writes an empty string to it,
+        //thus completely clearing the file.
         try {
             FileWriter favoriteFile = new FileWriter(this.filePath, false);
             favoriteFile.write("");
@@ -140,6 +140,7 @@ public class Storage extends Article {
      * @param _textToStore the line of text to store to the file.
      */
     private void storeTxt(String _textToStore) {
+        //Writes the string given from the parameter into the favorites file.
         try {
             FileWriter out = new FileWriter(this.filePath, true);
             out.append(_textToStore);

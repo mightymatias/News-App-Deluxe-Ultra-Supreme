@@ -1,5 +1,5 @@
 /*
-Last update: 27 April 2021
+Last update: 29 April 2021
 
 The main class that runs the GUI for the News App.
 
@@ -32,8 +32,10 @@ import javafx.scene.control.ProgressIndicator;
 
 public class GUI_Main extends Application {
 
+    //A list of articles as provided by the API through the translator.
     private static ArrayList<Article> articleList = new ArrayList<>();
 
+    //The storage object to be used throughout the program
     private static Storage favoriteStorage = new Storage();
 
     //Arrays for all of the data that will be processed
@@ -66,8 +68,8 @@ public class GUI_Main extends Application {
     final Stage stage = new Stage();
 
     /**
-     *     Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
-     * @param cou
+     * Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
+     * @param cou The country code to be passed into the program.
      */
     public void info(String cou){
         //Country that will be passed to API
@@ -90,7 +92,7 @@ public class GUI_Main extends Application {
     }
 
     /**
-     *     Main GUI method that creates the entire GUI interface, including webengine
+     * Main GUI method that creates the entire GUI interface, including webengine.
      * @param primaryStage
      * @throws Exception
      */
@@ -375,8 +377,8 @@ public class GUI_Main extends Application {
     }
 
     /**
-     *     Starts program
-     * @param args
+     * Starts program
+     * @param args System arguements.
      */
     public static void main(String[] args) {
         favoriteStorage.initializeStorage();
@@ -385,8 +387,8 @@ public class GUI_Main extends Application {
     }
 
     /**
-     *     Calls GUI_translator to get api article information
-     * @param _articleList
+     * Calls GUI_translator to get api article information
+     * @param _articleList The list of articles to prime.
      */
     public static void primeArrayLists(ArrayList<Article> _articleList){
         GUI_Translator guiTranslator = new GUI_Translator();
