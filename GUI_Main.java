@@ -48,7 +48,7 @@ public class GUI_Main extends Application {
 
     //caption for hyperlink button
     final static String[] captions = new String[]{
-            "Article"
+            "View Article"
     };
 
     //hyperlink creation for articles
@@ -255,24 +255,21 @@ public class GUI_Main extends Application {
             hbWeb.setAlignment(Pos.BASELINE_CENTER);
             hbWeb.getChildren().addAll(hpls);
 
-            //Label fav = new Label("Favorite");
-            //Label unfav = new Label("Unfavorite");
-
-            //String fav = "Favorite";
-            //String unfav = "Unfavorite";
-
+            //Creates favorite button to favorite or unfavorite articles
             Button favButton = new Button("Favorite");
 
             int finalI = i;
-            if(articleList.get(finalI).getIsFavorited() == false) {
-                favButton.setOnAction((ActionEvent t) -> {
+            favButton.setOnAction((ActionEvent z) -> {
+                if(articleList.get(finalI).getIsFavorited() == false) {
                     favoriteStorage.newFavorite(articleList.get(finalI));
                     System.out.println(articleList.get(finalI).getIsFavorited());
                     favButton.setText("Unfavorite");
-                });
-            } else if(articleList.get(finalI).getIsFavorited() == true) {
-                favButton.setText("Favorite");
-            }
+                } else if(articleList.get(finalI).getIsFavorited() == true) {
+                    favoriteStorage.removeFavorite(articleList.get(finalI));
+                    System.out.println(articleList.get(finalI).getIsFavorited());
+                    favButton.setText("Favorite");
+                }
+            });
 
             //Displays various article attributes
             Text title = new Text(GUI_Main.title.get(i));
