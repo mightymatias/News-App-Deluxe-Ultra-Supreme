@@ -514,13 +514,11 @@ public class GUI_Main extends Application {
             Button favButton = new Button("Unfavorite");
 
             favButton.setOnAction((ActionEvent z) -> {
-                if(articleList.get(finalI).getIsFavorited() == true) {
-                    favoriteStorage.removeFavorite(articleList.get(finalI));
-                    System.out.println(articleList.get(finalI).getIsFavorited());
+                if(favoriteStorage.favoriteArray.get(finalI).getIsFavorited() == true) {
+                    favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
                     favButton.setText("Favorite");
-                } else if(articleList.get(finalI).getIsFavorited() == false) {
-                    favoriteStorage.newFavorite(articleList.get(finalI));
-                    System.out.println(articleList.get(finalI).getIsFavorited());
+                } else if(favoriteStorage.favoriteArray.get(finalI).getIsFavorited() == false) {
+                    favoriteStorage.newFavorite(favoriteStorage.favoriteArray.get(finalI));
                     favButton.setText("Unfavorite");
                 }
             });
