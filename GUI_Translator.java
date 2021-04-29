@@ -5,6 +5,7 @@ This class serves to interact between the articles and the GuiMain class.
 
 Contributing authors: Austin Matias
  */
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GUI_Translator {
@@ -23,6 +24,8 @@ public class GUI_Translator {
 
     //An arrayList containing all of the header image URLs that need to be displayed on the GUI.
     protected ArrayList<String> imageUrlList = new ArrayList<>();
+
+    protected ArrayList<Boolean> favorited = new ArrayList<>();
 
     /**
      * The default constructor for the translator.
@@ -89,6 +92,18 @@ public class GUI_Translator {
             this.imageUrlList.add(_articleList.get(i).getUrlToImage());
         }
         return this.imageUrlList;
+    }
+
+    /**
+     *
+     * @param _articleList
+     * @return
+     */
+    protected ArrayList<Boolean> favorited(ArrayList<Article> _articleList) {
+        for (int i = 0; i < _articleList.toArray().length; i++){
+            this.favorited.add(_articleList.get(i).getIsFavorited());
+        }
+        return this.favorited;
     }
 }
 

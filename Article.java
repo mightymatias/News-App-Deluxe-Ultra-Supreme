@@ -16,6 +16,7 @@ public class Article {
     private String url = "No URL to show.";
     private String urlToImage = "No URL image to show";
     private String publishedAt = "No publishing date to show.";
+    private Boolean isFavorited = false;
 
     /**
      * The default constructor for the article object.
@@ -70,6 +71,8 @@ public class Article {
                 "\n" + this.publishedAt + "\n\n";
     }
 
+    protected void setIsFavorited(Boolean _state){this.isFavorited = _state;}
+
     //=================  GETTERS ===============
 
     public String getTitle() {
@@ -95,4 +98,6 @@ public class Article {
     public String getPublishedAt() {
         return this.publishedAt;
     }
+
+    public Boolean getIsFavorited() {return this.isFavorited;}
 }
