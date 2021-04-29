@@ -28,7 +28,6 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import javafx.scene.control.ProgressIndicator;
 
 public class GUI_Main extends Application {
 
@@ -153,16 +152,14 @@ public class GUI_Main extends Application {
         menuSettings.getItems().addAll(viewFavorites, country, exit);
         menuBar.getMenus().addAll(menuSettings);
 
-        //Progress indicator
-        ProgressIndicator PI = new ProgressIndicator();
-        HBox Ind = new HBox();
-        Ind.getChildren().addAll(PI);
-        Ind.setSpacing(5);
-        Ind.setPadding(new Insets(10, 10, 10, 10));
-        Ind.setAlignment(Pos.CENTER);
-
         roo.setTop(menuBar);
-        roo.setCenter(Ind);
+
+        //Loading GIF to make the GUI top quality
+        ImageView imageView = new ImageView();
+        imageView.setImage(new Image("loading.gif"));
+        imageView.setFitWidth(500);
+        imageView.setPreserveRatio(true);
+        roo.setCenter(imageView);
 
         //sets the stage to be scene and sets background color
         stage.setScene(sc);
@@ -367,11 +364,13 @@ public class GUI_Main extends Application {
 
         }
 
-        //Scrollbar, menubar, and article components are added to a single group to be passed to the scene
-        root.getChildren().addAll(vb, sp, menuBar);
+        //Scrollbar and article components are added to a single group to be passed to the scene
+        root.getChildren().addAll(vb, sp);
 
         //Creates main scene to display articles
-        Scene scene = new Scene(root, 1600, 800);
+        Scene scene = new Scene(new VBox(), 1600, 800);
+
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, root);
 
         //Text object to create proper spacing between return button and web object
         Text blank = new Text("\n\n");
@@ -511,16 +510,11 @@ public class GUI_Main extends Application {
             int finalI = i;
 
             //Creates favorite button to favorite or unfavorite articles
-            Button favButton = new Button("Unfavorite");
+            Button favButton = new Button("Remove From Favorites");
 
             favButton.setOnAction((ActionEvent z) -> {
-                if(favoriteStorage.favoriteArray.get(finalI).getIsFavorited() == true) {
-                    favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
-                    favButton.setText("Favorite");
-                } else if(favoriteStorage.favoriteArray.get(finalI).getIsFavorited() == false) {
-                    favoriteStorage.newFavorite(favoriteStorage.favoriteArray.get(finalI));
-                    favButton.setText("Unfavorite");
-                }
+                favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
+                viewFavorites();
             });
 
             //Displays various article attributes
@@ -592,11 +586,13 @@ public class GUI_Main extends Application {
 
         }
 
-        //Scrollbar, menubar, and article components are added to a single group to be passed to the scene
-        root.getChildren().addAll(vb, sp, menuBar);
+        //Scrollbar and article components are added to a single group to be passed to the scene
+        root.getChildren().addAll(vb, sp);
 
         //Creates main scene to display articles
-        Scene scene = new Scene(root, 1600, 800);
+        Scene scene = new Scene(new VBox(), 1600, 800);
+
+        ((VBox) scene.getRoot()).getChildren().addAll(menuBar, root);
 
         //Text object to create proper spacing between return button and web object
         Text blank = new Text("\n\n");
