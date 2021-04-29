@@ -1,10 +1,11 @@
 /*
-Last Update: 29 April 2021
+Last Update: 27 April 2021
 
 This class serves to interact between the articles and the GuiMain class.
 
-Contributing authors: Austin Matias, Connor Contursi
+Contributing authors: Austin Matias
  */
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GUI_Translator {
@@ -24,8 +25,7 @@ public class GUI_Translator {
     //An arrayList containing all of the header image URLs that need to be displayed on the GUI.
     protected ArrayList<String> imageUrlList = new ArrayList<>();
 
-    //An arrayList containing the favorited status of all articles.
-    protected ArrayList<Boolean> isFavorited = new ArrayList<>();
+    protected ArrayList<Boolean> favorited = new ArrayList<>();
 
     /**
      * The default constructor for the translator.
@@ -40,7 +40,6 @@ public class GUI_Translator {
      * @return An arrayList containing titles of articles.
      */
     protected ArrayList<String> setTitleList(ArrayList<Article> _articleList){
-        //Going through the ArrayList of Articles and saving their titles to a separate ArrayList.
         for (int i = 0; i < _articleList.toArray().length; i++){
             this.titleList.add(_articleList.get(i).getTitle());
         }
@@ -53,7 +52,6 @@ public class GUI_Translator {
      * @return An arrayList containing authors of articles.
      */
     protected ArrayList<String> setAuthorList(ArrayList<Article> _articleList){
-        //Going through the ArrayList of Articles and saving their authors to a separate ArrayList.
         for (int i = 0; i < _articleList.toArray().length; i++){
             this.authorList.add(_articleList.get(i).getAuthor());
         }
@@ -66,7 +64,6 @@ public class GUI_Translator {
      * @return An arrayList containing descriptions of articles.
      */
     protected ArrayList<String> setDescriptionList(ArrayList<Article> _articleList){
-        //Going through the ArrayList of Articles and saving their descriptions to a separate ArrayList.
         for (int i = 0; i < _articleList.toArray().length; i++){
             this.descriptionList.add(_articleList.get(i).getDescription());
         }
@@ -79,7 +76,6 @@ public class GUI_Translator {
      * @return An arrayList containing URLs of articles.
      */
     protected ArrayList<String> setUrlList(ArrayList<Article> _articleList){
-        //Going through the ArrayList of Articles and saving their URLs to a separate ArrayList.
         for (int i = 0; i < _articleList.toArray().length; i++){
             this.urlList.add(_articleList.get(i).getUrl());
         }
@@ -92,11 +88,22 @@ public class GUI_Translator {
      * @return An arrayList containing header image URLs of articles.
      */
     protected ArrayList<String> setImageUrlList(ArrayList<Article> _articleList){
-        //Going through the ArrayList of Articles and saving their header image URLs to a separate ArrayList.
         for (int i = 0; i < _articleList.toArray().length; i++){
             this.imageUrlList.add(_articleList.get(i).getUrlToImage());
         }
         return this.imageUrlList;
+    }
+
+    /**
+     * This method takes an arrayList of Article objects, and populates favorited with the boolean value of true or false depending on whether or not the article has been favorited
+     * @param _articleList
+     * @return
+     */
+    protected ArrayList<Boolean> favorited(ArrayList<Article> _articleList) {
+        for (int i = 0; i < _articleList.toArray().length; i++){
+            this.favorited.add(_articleList.get(i).getIsFavorited());
+        }
+        return this.favorited;
     }
 }
 
