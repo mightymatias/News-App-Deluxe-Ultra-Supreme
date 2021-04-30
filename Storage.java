@@ -98,7 +98,7 @@ public class Storage {
     /**
      * This method loads the favoriteArray from the text file on start up.
      */
-    private void loadArray() {
+    protected void loadArray() {
         try {
             //Create a scanner object with the text from the favorites file.
             Scanner input = new Scanner(new File(this.filePath));
