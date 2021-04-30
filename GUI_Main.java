@@ -4,6 +4,7 @@ Last update: 30 April 2021
 The main class that runs the GUI for the News App.
 
 Contributing authors: Connor Contursi, Austin Matias
+//test
  */
 
 import javafx.application.Application;
