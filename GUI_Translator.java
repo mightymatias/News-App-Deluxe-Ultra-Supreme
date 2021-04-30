@@ -27,10 +27,6 @@ public class GUI_Translator {
     //An arrayList containing all of the header image URLs that need to be displayed on the GUI.
     protected ArrayList<String> imageUrlList = new ArrayList<>();
 
-    //An arrayList containing the favorited status of all articles to be displayed on the GUI.
-    protected ArrayList<Boolean> favorited = new ArrayList<>();
-
-
     private API_Translator translator = new API_Translator();
 
     /**
@@ -108,18 +104,6 @@ public class GUI_Translator {
             this.imageUrlList.add(_articleList.get(i).getUrlToImage());
         }
         return this.imageUrlList;
-    }
-
-    /**
-     * This method takes an arrayList of Article objects, and populates favorited with the boolean value of true or false depending on whether or not the article has been favorited
-     * @param _articleList
-     * @return
-     */
-    protected ArrayList<Boolean> favorited(ArrayList<Article> _articleList) {
-        for (int i = 0; i < _articleList.toArray().length; i++){
-            this.favorited.add(_articleList.get(i).getIsFavorited());
-        }
-        return this.favorited;
     }
 }
 

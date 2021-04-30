@@ -73,6 +73,37 @@ public class Storage {
     }
 
     /**
+     * This method completely clears the favorites file.
+     */
+    protected void clear() {
+        //Creates a new file object at the favorite file path, and writes an empty string to it,
+        //thus completely clearing the file.
+        try {
+            FileWriter favoriteFile = new FileWriter(this.filePath, false);
+            favoriteFile.write("");
+        } catch (Exception e){
+            System.out.println("Error with Storage.clear: " + e);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method stores a line of text to the favorites file.
+     * @param _textToStore the line of text to store to the file.
+     */
+    protected void storeTxt(String _textToStore) {
+        //Writes the string given from the parameter into the favorites file.
+        try {
+            FileWriter out = new FileWriter(this.filePath, true);
+            out.append(_textToStore);
+            out.close();
+        } catch (Exception e) {
+            System.out.println("Error with Storage.storeTxt: " + e);
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * A method to ensure that the file to save favorites to exists, and create the file
      * if it doesn't exist.
      * @return A boolean that is true if the file exists. Should always return true.
@@ -118,38 +149,6 @@ public class Storage {
             e.printStackTrace();
         }
     }
-
-    /**
-     * This method completely clears the favorites file.
-     */
-    protected void clear() {
-        //Creates a new file object at the favorite file path, and writes an empty string to it,
-        //thus completely clearing the file.
-        try {
-            FileWriter favoriteFile = new FileWriter(this.filePath, false);
-            favoriteFile.write("");
-        } catch (Exception e){
-            System.out.println("Error with Storage.clear: " + e);
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * This method stores a line of text to the favorites file.
-     * @param _textToStore the line of text to store to the file.
-     */
-    protected void storeTxt(String _textToStore) {
-        //Writes the string given from the parameter into the favorites file.
-        try {
-            FileWriter out = new FileWriter(this.filePath, true);
-            out.append(_textToStore);
-            out.close();
-        } catch (Exception e) {
-            System.out.println("Error with Storage.storeTxt: " + e);
-            e.printStackTrace();
-        }
-    }
-
 
     //==============Quan's TESTED CODE ====================
 

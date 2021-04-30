@@ -15,13 +15,13 @@ import org.json.*;
 public class API_Translator {
 
     //The API key for the NewsAPI.
-    private final String API_KEY = "061df24bf9374cc9a4d897e1655b7aee";
+    private final String apiKey = "061df24bf9374cc9a4d897e1655b7aee";
 
     //The prefix used for all API calls.
-    private final String API_PREFIX = "&apiKey=";
+    private final String apiPrefix = "&apiKey=";
 
     //The base url which is used for all calls.
-    private final String BASE_URL = "https://newsapi.org/v2/";
+    private final String baseUrl = "https://newsapi.org/v2/";
 
      /**
       * Method that retrieves the top headlines for a certain country.
@@ -35,7 +35,7 @@ public class API_Translator {
         //Parameter for the API call, made as variables so that they can be changed should the API change.
         String callAction = "top-headlines?country=";
         //The string to actual be passed to the API.
-        String urlString = BASE_URL + callAction + cleanCountry + API_PREFIX + API_KEY;
+        String urlString = baseUrl + callAction + cleanCountry + apiPrefix + apiKey;
 
         //Connecting to the API and saving the contents for use with the JSON parser.
         StringBuilder content = connectAndReturnContents(urlString);
@@ -63,7 +63,7 @@ public class API_Translator {
         //Parameter for the API call, made as variables so that they can be changed should the API change.
         String callAction = "top-headlines?country=us&category=";
         //The string to actual be passed to the API.
-        String urlString = BASE_URL + callAction + cleanCategory + API_PREFIX + API_KEY;
+        String urlString = baseUrl + callAction + cleanCategory + apiPrefix + apiKey;
 
         //Connecting to the API and saving the contents for use with the JSON parser.
         StringBuilder content = connectAndReturnContents(urlString);
@@ -88,7 +88,7 @@ public class API_Translator {
     protected JSONObject sortByKeyword(String _keyword) {
         String cleanKw = _keyword.replaceAll("\\s", "_").toLowerCase();
         String callAction = "top-headlines?q=";
-        String urlString = BASE_URL + callAction + cleanKw + API_PREFIX + API_KEY;
+        String urlString = baseUrl + callAction + cleanKw + apiPrefix + apiKey;
 
         StringBuilder content = connectAndReturnContents(urlString);
 
@@ -108,10 +108,10 @@ public class API_Translator {
      * @param _domainName The domain to search for.
      * @return A JSON Object containing all headlines returned from the search.
      */
-    protected JSONObject sortByDom(String _domainName) {
+    protected JSONObject sortByDomain(String _domainName) {
         String cleanDom = _domainName.toLowerCase();
         String callAction = "top-headlines?domains=";
-        String urlString = BASE_URL + callAction + cleanDom + ".com" + API_PREFIX + API_KEY;
+        String urlString = baseUrl + callAction + cleanDom + ".com" + apiPrefix + apiKey;
 
         StringBuilder content = connectAndReturnContents(urlString);
 
