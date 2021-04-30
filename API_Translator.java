@@ -1,5 +1,5 @@
 /*
-Last update: 27 April 2021.
+Last update: 29 April 2021.
 
 Methods that interact directly with the News API.
 
@@ -30,20 +30,22 @@ public class API_Translator {
       * @return A JSON Object containing all the top headlines for a certain country.
       */
     protected JSONObject sortByCountry(String _country) {
-        //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
-        // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
-        // th, tr, tw, ua, us, ve, za]
+        //Clean the input to make sure that it is formatted correctly.
         String cleanCountry = _country.toLowerCase();
+        //Parameter for the API call, made as variables so that they can be changed should the API change.
         String callAction = "top-headlines?country=";
+        //The string to actual be passed to the API.
         String urlString = BASE_URL + callAction + cleanCountry + API_PREFIX + API_KEY;
 
+        //Connecting to the API and saving the contents for use with the JSON parser.
         StringBuilder content = connectAndReturnContents(urlString);
 
+        //Creating a JSON object from the content provided by the API.
         try {
             return new JSONObject(content.toString());
 
         } catch (Exception e) {
-            System.out.println("Error: " + e.toString());
+            System.out.println("Error in API_Translator.sortByCountry : " + e.toString());
 
         }
         return new JSONObject();
@@ -56,17 +58,22 @@ public class API_Translator {
      * @return a JSON object containing the top headlines for that category.
      */
     protected JSONObject sortByCategory(String _category) {
+        //Clean the input to make sure that it is formatted correctly.
         String cleanCategory = _category.toLowerCase();
+        //Parameter for the API call, made as variables so that they can be changed should the API change.
         String callAction = "top-headlines?country=us&category=";
+        //The string to actual be passed to the API.
         String urlString = BASE_URL + callAction + cleanCategory + API_PREFIX + API_KEY;
 
+        //Connecting to the API and saving the contents for use with the JSON parser.
         StringBuilder content = connectAndReturnContents(urlString);
 
+        //Creating a JSON object from the content provided by the API.
         try {
             return new JSONObject(content.toString());
 
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Error in API_Translator.sortByCategory: " + e);
         }
 
         return new JSONObject();
@@ -120,23 +127,27 @@ public class API_Translator {
 
     /**
      * This method takes in a JSON Object and creates an ArrayList of Article objects.
+     * Method by Austin Matias.
      * @param _object the JSON Object containing articles.
      * @return The ArrayList of article objects.
      */
     protected ArrayList<Article> getArrayListOfArticlesFromJSONObject(JSONObject _object){
+        //declaring the ArrayList.
         ArrayList<Article> articleArrayList = new ArrayList<>();
+        //A loop that goes for the length of the JSON object, adding each article to the ArrayList.
         try {
             for (int i = 0; i < _object.getJSONArray("articles").length(); i++){
                 articleArrayList.add(getSpecificArticleFromJSON(_object, i));
             }
         } catch (Exception e){
-            System.out.println("Error: " + e);
+            System.out.println("Error in API_Translator.getArrayListOfArticlesFromJSONObject: " + e);
         }
         return articleArrayList;
     }
   
     /**
      * A method that connects to the API using a given URL, and returns a string containing data from the given URL.
+     * Method by Austin Matias.
      * @param _urlString The URL to connect to.
      * @return A StringBuilder object containing the results of the URL connection.
      */
@@ -151,8 +162,7 @@ public class API_Translator {
             int status = con.getResponseCode();
             if (status != 200){
                 System.out.println("connection request failed");
-                return new StringBuilder("Error: API request failed." +
-                        " Status: ").append(status);
+                return new StringBuilder("Error: API request failed. Status: ").append(status);
             } else {
                 //Parse input stream into a text string.
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -167,12 +177,13 @@ public class API_Translator {
                 return content;
             }
         } catch (Exception e){
-            return new StringBuilder("*****Error: ").append(e);
+            return new StringBuilder("Error in API_Translator.connectAndReturnContents: ").append(e);
         }
     }
 
     /**
      * This class takes a JSON Object with multiple articles, and pulls a specific one out.
+     * Method by Austin Matias.
      * @param _object The JSON Object containing multiple articles.
      * @param _articleNumber The index in the array of the article to be pulled out.
      * @return An article object containing information about the article.
@@ -181,24 +192,10 @@ public class API_Translator {
         try {
             return new Article(_object.getJSONArray("articles").getJSONObject(_articleNumber));
         } catch (Exception e){
-            System.out.println("**Error: " + e);
+            System.out.println("Error in API_Translator.getSpecificArticleFromJSON: " + e);
         }
+        //Return statement should never be reached. Only in the case of an error,
+        //in which point the error log is printed to the console.
         return new Article();
-    }
-
-    /**
-     * A helper method to get the number of articles in a JSON Object, useful when iterating through the JSON Object
-     * in other methods.
-     * @param _object The JSON Object to get the length of.
-     * @return The number of articles in the JSON Object.
-     */
-    private int getLengthOfJSONObjectArticleArray(JSONObject _object){
-        int length = 0;
-        try {
-            length = _object.getJSONArray("articles").length();
-        } catch (Exception e){
-            System.out.println("Error: " + e);
-        }
-        return length;
     }
 }

@@ -95,7 +95,7 @@ public class GUI_Translator {
     }
 
     /**
-     *
+     * This method takes an arrayList of Article objects, and populates favorited with the boolean value of true or false depending on whether or not the article has been favorited
      * @param _articleList
      * @return
      */

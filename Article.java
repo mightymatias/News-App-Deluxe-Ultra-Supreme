@@ -1,5 +1,5 @@
 /*
-Last update: 27 April 2021.
+Last update: 29 April 2021.
 
 The Article object contains all relevant data about a specific article.
 
@@ -10,12 +10,25 @@ import org.json.JSONObject;
 
 public class Article {
 
+    //The title of the article.
     private String title = "No title to show.";
+
+    //The author of the article.
     private String author = "No author to show.";
+
+    //The description of the article.
     private String description = "No description to show.";
+
+    //The url of the article.
     private String url = "No URL to show.";
+
+    //The url to the header image of the article.
     private String urlToImage = "No URL image to show";
+
+    //The time the article was published at.
     private String publishedAt = "No publishing date to show.";
+
+    //The favorited status of an article.
     private Boolean isFavorited = false;
 
     /**
@@ -29,6 +42,7 @@ public class Article {
      */
     public Article(JSONObject _object){
         try{
+            //Setting all of the class level variables to their values from the JSON object.
             this.title = _object.getString("title");
             this.author = _object.getString("author");
             this.description = _object.getString("description");
@@ -36,7 +50,7 @@ public class Article {
             this.urlToImage = _object.getString("urlToImage");
             this.publishedAt = _object.getString("publishedAt");
         } catch (Exception e){
-            System.out.println("Error: " + e);
+            System.out.println("Error in Article's JSON constructor: " + e);
         }
     }
 
@@ -51,6 +65,7 @@ public class Article {
      */
     public Article(String _title, String _author, String _description, String _url, String _urlToImage, String _publishedAt){
         try{
+            //Setting all of the class level variables to their values provided from the passed parameters.
             this.title = _title;
             this.author = _author;
             this.description = _description;
@@ -58,7 +73,7 @@ public class Article {
             this.urlToImage = _urlToImage;
             this.publishedAt = _publishedAt;
         } catch (Exception e){
-            System.out.println("Error: " + e);
+            System.out.println("Error in Article's manual constructor: " + e);
         }
     }
 
@@ -71,33 +86,59 @@ public class Article {
                 "\n" + this.publishedAt + "\n\n";
     }
 
+    //=================  SETTERS  ===============
+
+    /**
+     * This method sets the favorite state of the article.
+     * @param _state A boolean depicting whether the article's favorited status should be true or false.
+     */
     protected void setIsFavorited(Boolean _state){this.isFavorited = _state;}
 
-    //=================  GETTERS ===============
+    //=================  GETTERS  ===============
 
+    /**
+     * A method to get the title of the article.
+     * @return A string containing the title of the article.
+     */
     public String getTitle() {
         return this.title;
     }
 
+    /**
+     * A method to get the author of the article.
+     * @return A string containing the author of the article.
+     */
     public String getAuthor() {
         return this.author;
     }
 
+    /**
+     * A method to get the description of the article.
+     * @return A string containing the description of the article.
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * A method to get the URL of the article.
+     * @return A string containing the URL of the article.
+     */
     public String getUrl() {
         return this.url;
     }
 
+    /**
+     * A method to get the URL to the header image for the article.
+     * @return A string containing the URL to the header image for the article.
+     */
     public String getUrlToImage() {
         return this.urlToImage;
     }
 
-    public String getPublishedAt() {
-        return this.publishedAt;
-    }
-
+    /**
+     * A method to get the favorited status of the article.
+     * @return A boolean containing the favorited status of the article.
+     */
     public Boolean getIsFavorited() {return this.isFavorited;}
 }

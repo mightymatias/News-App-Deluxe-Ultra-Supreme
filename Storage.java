@@ -80,7 +80,7 @@ public class Storage extends Article {
      * if it doesn't exist.
      * @return A boolean that is true if the file exists. Should always return true.
      */
-    protected boolean ensureFileExistence() {
+    private boolean ensureFileExistence() {
         //create the file object
         File favoriteArticles = new File(this.filePath);
 
@@ -101,7 +101,7 @@ public class Storage extends Article {
     /**
      * This method loads the favoriteArray from the text file on start up.
      */
-    protected void loadArray() {
+    private void loadArray() {
         try {
             Scanner input = new Scanner(new File(this.filePath));
             //setting variables to be assigned to object
@@ -125,7 +125,7 @@ public class Storage extends Article {
     /**
      * This method completely clears the favorites file.
      */
-    protected void clear() {
+    private void clear() {
         try {
             FileWriter favoriteFile = new FileWriter(this.filePath, false);
             favoriteFile.write("");
@@ -139,7 +139,7 @@ public class Storage extends Article {
      * This method stores a line of text to the favorites file.
      * @param _textToStore the line of text to store to the file.
      */
-    protected void storeTxt(String _textToStore) {
+    private void storeTxt(String _textToStore) {
         try {
             FileWriter out = new FileWriter(this.filePath, true);
             out.append(_textToStore);
