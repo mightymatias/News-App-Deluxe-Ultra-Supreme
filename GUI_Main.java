@@ -1,5 +1,5 @@
 /*
-Last update: 29 April 2021
+Last update: 30 April 2021
 
 The main class that runs the GUI for the News App.
 
@@ -154,12 +154,12 @@ public class GUI_Main extends Application {
         imageView.setPreserveRatio(true);
         root.setCenter(imageView);
 
-        //sets the stage to be scene and sets background color
-        stage.setScene(scene);
+        //Sets stage name and color
         stage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
+        stage.setResizable(false);
 
-        //generates stage
+        //Generates stage
         stage.setScene(scene);
         stage.show();
     }
@@ -235,7 +235,7 @@ public class GUI_Main extends Application {
         sp.setContent(vb);
         sp.setHbarPolicy((ScrollPane.ScrollBarPolicy.NEVER));
         sp.setVmax(800);
-        sp.setPrefSize(1600, 800);
+        sp.setPrefSize(1600, 775);
         sp.pannableProperty().set(true);
 
         //Loop that pushes all of the article information to the GUI
@@ -244,18 +244,8 @@ public class GUI_Main extends Application {
             //Allows the images to be displayed
             final Image image;
             final ImageView pic;
-
-            //Placeholder image in case image url is not provided for an article
-            final String placeholder = "http://www.bobos.it/new/wp-content/uploads/2017/11/tv-noise-0212-retro-tv-color-bars-loop_4yiztcvfg__F0000.png";
-
-            //Checks to make sure url is provided
-            if(imageURL.get(i) != "null") {
-                image = new Image(imageURL.get(i));
-                pic = new ImageView(image);
-            } else {
-                image = new Image(placeholder);
-                pic = new ImageView(image);
-            }
+            image = new Image(imageURL.get(i));
+            pic = new ImageView(image);
 
             //Creates button to view the article
             final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
@@ -384,6 +374,7 @@ public class GUI_Main extends Application {
         //Sets the stage name and color
         stage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
+        stage.setResizable(false);
 
         //Generates stage
         stage.setScene(scene);
@@ -461,7 +452,7 @@ public class GUI_Main extends Application {
         sp.setContent(vb);
         sp.setHbarPolicy((ScrollPane.ScrollBarPolicy.NEVER));
         sp.setVmax(800);
-        sp.setPrefSize(1600, 800);
+        sp.setPrefSize(1600, 775);
         sp.pannableProperty().set(true);
 
         //Loop that pushes all of the article information to the GUI
@@ -470,18 +461,8 @@ public class GUI_Main extends Application {
             //Allows the images to be displayed
             final Image image;
             final ImageView pic;
-
-            //Placeholder image in case image url is not provided for an article
-            final String placeholder = "http://www.bobos.it/new/wp-content/uploads/2017/11/tv-noise-0212-retro-tv-color-bars-loop_4yiztcvfg__F0000.png";
-
-            //Checks to make sure url is provided
-            if(imageURL.get(i) != "null") {
-                image = new Image(imageURL.get(i));
-                pic = new ImageView(image);
-            } else {
-                image = new Image(placeholder);
-                pic = new ImageView(image);
-            }
+            image = new Image(imageURL.get(i));
+            pic = new ImageView(image);
 
             //Creates button to view the article
             final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
@@ -606,6 +587,7 @@ public class GUI_Main extends Application {
         //Sets the stage name and color
         stage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
+        stage.setResizable(false);
 
         //Generates stage
         stage.setScene(scene);
