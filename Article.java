@@ -1,5 +1,5 @@
 /*
-Last update: 29 April 2021.
+Last update: 30 April 2021.
 
 The Article object contains all relevant data about a specific article.
 

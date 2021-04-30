@@ -21,15 +21,6 @@ public class Storage {
     //The file path for the file that will contain the favorite articles while the application is closed.
     private String filePath = "FavoriteArticles.txt";
 
-
-    /**         HOW DOES THIS CLASS WORK? (BASIC)
-     *          First: Having an ArrayList of favorite Article and Check for existent of txt file (if not exist then create) (if exist then load data into an arraylist)
-     *          Second: (optional) to add an article to favorite                    use method  addArticle (Article _article)
-     *          Third:  (optional) to delete an article from the List               use method  deleteArticle (String _title)
-     *          Fourth: (optional) to select an article from the List               use method  selectArticle (String _title)
-     */
-
-
     /**
      * The default constructor for the storage object.
      */
