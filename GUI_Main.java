@@ -114,7 +114,7 @@ public class GUI_Main extends Application {
         }
 
         //Menu button for exiting the program
-        MenuItem exit = new MenuItem("Exit");
+        MenuItem exit = new MenuItem("Save & Exit");
         exit.setOnAction((ActionEvent t) -> {
             favoriteStorage.saveArrayToFile();
             System.exit(0);
@@ -233,7 +233,7 @@ public class GUI_Main extends Application {
         }
 
         //Adds button to exit program
-        MenuItem exit = new MenuItem("Exit");
+        MenuItem exit = new MenuItem("Save & Exit");
         exit.setOnAction((ActionEvent t) -> {
             favoriteStorage.saveArrayToFile();
             System.exit(0);
@@ -453,7 +453,7 @@ public class GUI_Main extends Application {
         }
 
         //Adds button to exit program
-        MenuItem exit = new MenuItem("Exit");
+        MenuItem exit = new MenuItem("Save & Exit");
         exit.setOnAction((ActionEvent t) -> {
             favoriteStorage.saveArrayToFile();
             System.exit(0);

@@ -14,11 +14,15 @@ public class Test_Class extends Storage {
     Article ex2 = new Article("title 2", "author", "there is maybe a description", "urrrrrrrrrrrrlllllll.com", "no", "4/30");
     ArrayList<Article> example = new ArrayList<>();
 
+    public static void main(String[] args) {
+
+    }
+
     /**
      * This method test the functionality of the InitializedStorage, add function, clear , and lastly the saveArrayToFile.
      * The overall goal is to see if the txt is in the document.
      */
-    private void test1() {
+    private static void test1() {
         Scanner in = new Scanner(System.in);
         Storage test1 = new Storage();
         test1.initializeStorage();
@@ -29,8 +33,8 @@ public class Test_Class extends Storage {
         } else {
             System.out.println("TXT FILE SAVED");
         }
-        example.add(ex1);
-        example.add(ex2);
+        //example.add(ex1);
+        //example.add(ex2);
         test1.saveArrayToFile();
     }
 
