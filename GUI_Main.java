@@ -72,11 +72,11 @@ public class GUI_Main extends Application {
 
     /**
      * Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
-     * @param cou The country code to be passed into the program.
+     * @param countrySelection The country code to be passed into the program.
      */
-    public void info(String cou){
+    public void info(String countrySelection){
         //Country that will be passed to API
-        String country = cou;
+        String country = countrySelection;
 
         API_Translator translator = new API_Translator();
 
@@ -96,6 +96,7 @@ public class GUI_Main extends Application {
     public void viewFavorites() {
         primeArrayLists(favoriteStorage.favoriteArray);
 
+        //Loads gui
         favoriteDisplay();
     }
 
@@ -108,10 +109,7 @@ public class GUI_Main extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         BorderPane root = new BorderPane();
-        Scene sc = new Scene(root, 1600, 800);
-
-        //VBox object for various things
-        VBox vb = new VBox();
+        Scene scene = new Scene(root, 1600, 800);
 
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
@@ -157,12 +155,12 @@ public class GUI_Main extends Application {
         root.setCenter(imageView);
 
         //sets the stage to be scene and sets background color
-        stage.setScene(sc);
+        stage.setScene(scene);
         stage.setTitle("NADUS");
-        sc.setFill(Color.WHITE);
+        scene.setFill(Color.WHITE);
 
         //generates stage
-        stage.setScene(sc);
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -383,8 +381,7 @@ public class GUI_Main extends Application {
         webRoot.getChildren().addAll(vbWeb);
         webRoot.setAutoSizeChildren(true);
 
-        //Sets the stage to be scene and sets background color
-        stage.setScene(scene);
+        //Sets the stage name and color
         stage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
 
@@ -507,7 +504,8 @@ public class GUI_Main extends Application {
 
             favButton.setOnAction((ActionEvent z) -> {
                 favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
-                favoriteDisplay();
+                //System.out.println(favoriteStorage.favoriteArray.get(finalI));
+                viewFavorites();
             });
 
             //Displays various article attributes
@@ -605,8 +603,7 @@ public class GUI_Main extends Application {
         webRoot.getChildren().addAll(vbWeb);
         webRoot.setAutoSizeChildren(true);
 
-        //Sets the stage to be scene and sets background color
-        stage.setScene(scene);
+        //Sets the stage name and color
         stage.setTitle("NADUS");
         scene.setFill(Color.WHITE);
 
