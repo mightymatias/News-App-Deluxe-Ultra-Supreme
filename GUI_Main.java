@@ -47,15 +47,15 @@ public class GUI_Main extends Application {
     //Drop shadow for pictures
     DropShadow shadow = new DropShadow();
 
-    //caption for hyperlink button
+    //Caption for hyperlink button
     final static String[] captions = new String[]{
             "View Article"
     };
 
-    //hyperlink creation for articles
+    //Hyperlink creation for articles
     final Hyperlink[] hpls = new Hyperlink[captions.length];
 
-    //list of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
+    //List of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
     // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
     // th, tr, tw, ua, us, ve, za]
     final static String[] countries = new String[]{
@@ -107,16 +107,11 @@ public class GUI_Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        BorderPane roo = new BorderPane();
-        Scene sc = new Scene(roo, 1600, 800);
-
-
+        BorderPane root = new BorderPane();
+        Scene sc = new Scene(root, 1600, 800);
 
         //VBox object for various things
         VBox vb = new VBox();
-
-        //Creates object groups for various GUI components
-        Group root = new Group();
 
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
@@ -152,14 +147,14 @@ public class GUI_Main extends Application {
         menuSettings.getItems().addAll(viewFavorites, country, exit);
         menuBar.getMenus().addAll(menuSettings);
 
-        roo.setTop(menuBar);
+        root.setTop(menuBar);
 
         //Loading GIF to make the GUI top quality
         ImageView imageView = new ImageView();
         imageView.setImage(new Image("loading.gif"));
         imageView.setFitWidth(500);
         imageView.setPreserveRatio(true);
-        roo.setCenter(imageView);
+        root.setCenter(imageView);
 
         //sets the stage to be scene and sets background color
         stage.setScene(sc);
@@ -175,8 +170,6 @@ public class GUI_Main extends Application {
      * Creates main GUI to display
      */
     public void guiDisplay() {
-//        BorderPane bp = new BorderPane();
-
         //Creates scrollpane object and image objects
         ScrollPane sp = new ScrollPane();
 
@@ -514,7 +507,7 @@ public class GUI_Main extends Application {
 
             favButton.setOnAction((ActionEvent z) -> {
                 favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
-                viewFavorites();
+                favoriteDisplay();
             });
 
             //Displays various article attributes
