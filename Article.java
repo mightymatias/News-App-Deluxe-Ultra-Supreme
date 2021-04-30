@@ -20,7 +20,7 @@ public class Article {
     private String description = "No description to show.";
 
     //The url of the article.
-    private String url = "No URL to show.";
+    private String url = "http://www.google.com";
 
     //The url to the header image of the article.
     private String urlToImage = "No URL image to show";
