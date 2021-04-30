@@ -608,5 +608,6 @@ public class GUI_Main extends Application {
         summary = guiTranslator.setDescriptionList(_articleList);
         URL = guiTranslator.setUrlList(_articleList);
         imageURL = guiTranslator.setImageUrlList(_articleList);
+        //test
     }
 }
