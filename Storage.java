@@ -1,5 +1,5 @@
 /*
-Last update: 27 April 2021.
+Last update: 29 April 2021.
 
 The Storage object contains method that manipulate persistent data storage.
 
@@ -13,29 +13,26 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Storage extends Article {
+public class Storage {
 
     //The ArrayList that the favorite articles are saved in while the program runs.
     protected ArrayList<Article> favoriteArray = new ArrayList<>();
 
-    protected int arrayCounter=0;
-
     //The file path for the file that will contain the favorite articles while the application is closed.
     private String filePath = "FavoriteArticles.txt";
-
-
-    /**         HOW DOES THIS CLASS WORK? (BASIC)
-     *          First: Having an ArrayList of favorite Article and Check for existent of txt file (if not exist then create) (if exist then load data into an arraylist)
-     *          Second: (optional) to add an article to favorite                    use method  addArticle (Article _article)
-     *          Third:  (optional) to delete an article from the List               use method  deleteArticle (String _title)
-     *          Fourth: (optional) to select an article from the List               use method  selectArticle (String _title)
-     */
-
 
     /**
      * The default constructor for the storage object.
      */
     protected Storage(){}
+
+    /**
+     * A constructor used to specify a directory for testing purposes.
+     * @param _filePath the file path of the favorite file.
+     */
+    protected Storage(String _filePath){
+        this.filePath = _filePath;
+    }
 
     /**
      * To be used on program load to ensure that the favorite article file exists, and to create it if it does not,
@@ -101,10 +98,11 @@ public class Storage extends Article {
     /**
      * This method loads the favoriteArray from the text file on start up.
      */
-    protected void loadArray() {
+    private void loadArray() {
         try {
+            //Create a scanner object with the text from the favorites file.
             Scanner input = new Scanner(new File(this.filePath));
-            //setting variables to be assigned to object
+            //Reading through the file, creating Article objects from the information contained in it.
             while (input.hasNextLine()) {
                 String title = input.nextLine();
                 String author = input.nextLine();
@@ -119,13 +117,14 @@ public class Storage extends Article {
             System.out.println("Error with Storage.loadArray: " + e);
             e.printStackTrace();
         }
-        System.out.println(this.favoriteArray);
     }
 
     /**
      * This method completely clears the favorites file.
      */
     protected void clear() {
+        //Creates a new file object at the favorite file path, and writes an empty string to it,
+        //thus completely clearing the file.
         try {
             FileWriter favoriteFile = new FileWriter(this.filePath, false);
             favoriteFile.write("");
@@ -140,6 +139,7 @@ public class Storage extends Article {
      * @param _textToStore the line of text to store to the file.
      */
     protected void storeTxt(String _textToStore) {
+        //Writes the string given from the parameter into the favorites file.
         try {
             FileWriter out = new FileWriter(this.filePath, true);
             out.append(_textToStore);
@@ -221,7 +221,7 @@ public class Storage extends Article {
     }
 
     /**Support method*/
-    /**The purpose of this methods is search for an article to see if it exist or not
+    /**The purpose of this methods is to search for an article to see if it exist or not
      * if yes return its index in the ArrayList
      * Otherwise, return -1 to check at call.
      * @param  _title is require to search for the article in the Array as a keyword
@@ -256,17 +256,6 @@ public class Storage extends Article {
     {
         System.out.println(favoriteArray.get(index).toString());
     }
-
-    /**View saved favorite articles
-     * The purpose of this method is to see all saved articles in favorite list
-     * */
-    public void viewArticles() {
-        for (int i = 0; i < favoriteArray.size(); i++)
-        {
-            System.out.println("Article #" + i + ":\n" + favoriteArray.get(i));
-        }
-    }
-
 }
 
 

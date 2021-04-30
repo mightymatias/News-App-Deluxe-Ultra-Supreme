@@ -1,5 +1,5 @@
 /*
-Last update: 29 April 2021.
+Last update: 30 April 2021.
 
 The Article object contains all relevant data about a specific article.
 
@@ -20,7 +20,7 @@ public class Article {
     private String description = "No description to show.";
 
     //The url of the article.
-    private String url = "No URL to show.";
+    private String url = "http://www.google.com";
 
     //The url to the header image of the article.
     private String urlToImage = "No URL image to show";
@@ -47,11 +47,27 @@ public class Article {
             this.author = _object.getString("author");
             this.description = _object.getString("description");
             this.url = _object.getString("url");
-            this.urlToImage = _object.getString("urlToImage");
+            if (_object.getString("urlToImage").equals("null")){
+                this.urlToImage = "http://www.bobos.it/new/wp-content/uploads/2017/11/tv-noise-0212-retro-tv-color-bars-loop_4yiztcvfg__F0000.png";
+            } else {
+                this.urlToImage = _object.getString("urlToImage");
+            }
             this.publishedAt = _object.getString("publishedAt");
         } catch (Exception e){
             System.out.println("Error in Article's JSON constructor: " + e);
         }
+    }
+
+    /**
+     * A contructor used mainly for testing purposes which only takes in a title, author, and description
+     * @param _title The title of the article.
+     * @param _author The author of the article.
+     * @param _description A brief description of the article.
+     */
+    public Article(String _title, String _author, String _description){
+        this.title = _title;
+        this.author = _author;
+        this.description = _description;
     }
 
     /**
