@@ -114,7 +114,7 @@ public class Storage {
     /**
      * This method completely clears the favorites file.
      */
-    private void clear() {
+    protected void clear() {
         //Creates a new file object at the favorite file path, and writes an empty string to it,
         //thus completely clearing the file.
         try {
@@ -130,7 +130,7 @@ public class Storage {
      * This method stores a line of text to the favorites file.
      * @param _textToStore the line of text to store to the file.
      */
-    private void storeTxt(String _textToStore) {
+    protected void storeTxt(String _textToStore) {
         //Writes the string given from the parameter into the favorites file.
         try {
             FileWriter out = new FileWriter(this.filePath, true);
@@ -213,7 +213,7 @@ public class Storage {
     }
 
     /**Support method*/
-    /**The purpose of this methods is search for an article to see if it exist or not
+    /**The purpose of this methods is to search for an article to see if it exist or not
      * if yes return its index in the ArrayList
      * Otherwise, return -1 to check at call.
      * @param  _title is require to search for the article in the Array as a keyword
@@ -248,17 +248,6 @@ public class Storage {
     {
         System.out.println(favoriteArray.get(index).toString());
     }
-
-    /**View saved favorite articles
-     * The purpose of this method is to see all saved articles in favorite list
-     * */
-    public void viewArticles() {
-        for (int i = 0; i < favoriteArray.size(); i++)
-        {
-            System.out.println("Article #" + i + ":\n" + favoriteArray.get(i));
-        }
-    }
-
 }
 
 

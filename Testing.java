@@ -18,6 +18,7 @@ public class Testing {
         Storage storage = new Storage();
         storage.initializeStorage();
         selection();
+
     }
 
     /**
