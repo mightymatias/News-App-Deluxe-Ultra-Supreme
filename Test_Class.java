@@ -1,21 +1,18 @@
+/*
+Last update: 30 April 2021.
+
+This class helps see if the storage component is working as intended by altering a txt file.
+
+Contributing authors: Dillon Halbert
+ */
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Test_Class extends Storage {
-    /**
-     * Last update: 29 April 2021
-     *
-     * The main method of the project
-     *
-     * Contributing authors:Dillon Halbert
-     **/
 
     Article ex1 = new Article("title 1", "author", "there is a description", "urrrrrrrrrrrrlllllll.com", "no", "4/30");
     Article ex2 = new Article("title 2", "author", "there is maybe a description", "urrrrrrrrrrrrlllllll.com", "no", "4/30");
-
-
     ArrayList<Article> example = new ArrayList<>();
-
 
     /**
      * This method test the functionality of the InitializedStorage, add function, clear , and lastly the saveArrayToFile.
@@ -38,16 +35,15 @@ public class Test_Class extends Storage {
     }
 
     /**
-     * In this test i will pull the txt from and smack it into an array and print it .
+     * In this test I will pull the text from the txt file and smack it into an array delete 1 element the print the array .
      */
     private void test2(){
         Scanner in = new Scanner(System.in);
         Storage test2 = new Storage();
-        System.out.println("Enter number 1 if you want to clear txt file for testing");
+        System.out.println("Enter number 1 if you want to alter the txt file for testing");
         String key = in.nextLine();
         if (key.equals("1")) {
             loadArray();
-            int i;
             try {
                 deleteArticle("title 2");
             } catch (IOException e) {
@@ -58,6 +54,4 @@ public class Test_Class extends Storage {
         }
     }
 
-
 }
-
