@@ -47,7 +47,11 @@ public class Article {
             this.author = _object.getString("author");
             this.description = _object.getString("description");
             this.url = _object.getString("url");
-            this.urlToImage = _object.getString("urlToImage");
+            if (_object.getString("urlToImage").equals("null")){
+                this.urlToImage = "http://www.bobos.it/new/wp-content/uploads/2017/11/tv-noise-0212-retro-tv-color-bars-loop_4yiztcvfg__F0000.png";
+            } else {
+                this.urlToImage = _object.getString("urlToImage");
+            }
             this.publishedAt = _object.getString("publishedAt");
         } catch (Exception e){
             System.out.println("Error in Article's JSON constructor: " + e);
