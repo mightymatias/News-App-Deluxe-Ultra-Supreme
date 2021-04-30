@@ -59,6 +59,18 @@ public class Article {
     }
 
     /**
+     * A contructor used mainly for testing purposes which only takes in a title, author, and description
+     * @param _title The title of the article.
+     * @param _author The author of the article.
+     * @param _description A brief description of the article.
+     */
+    public Article(String _title, String _author, String _description){
+        this.title = _title;
+        this.author = _author;
+        this.description = _description;
+    }
+
+    /**
      * A constructor used to custom make an article object. Used primarily for testing purposes.
      * @param _title The title of the article.
      * @param _author The author of the article.
