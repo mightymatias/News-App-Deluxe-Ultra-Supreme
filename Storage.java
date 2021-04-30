@@ -101,7 +101,7 @@ public class Storage extends Article {
     /**
      * This method loads the favoriteArray from the text file on start up.
      */
-    private void loadArray() {
+    protected void loadArray() {
         try {
             Scanner input = new Scanner(new File(this.filePath));
             //setting variables to be assigned to object
@@ -125,7 +125,7 @@ public class Storage extends Article {
     /**
      * This method completely clears the favorites file.
      */
-    private void clear() {
+    protected void clear() {
         try {
             FileWriter favoriteFile = new FileWriter(this.filePath, false);
             favoriteFile.write("");
@@ -139,7 +139,7 @@ public class Storage extends Article {
      * This method stores a line of text to the favorites file.
      * @param _textToStore the line of text to store to the file.
      */
-    private void storeTxt(String _textToStore) {
+    protected void storeTxt(String _textToStore) {
         try {
             FileWriter out = new FileWriter(this.filePath, true);
             out.append(_textToStore);
