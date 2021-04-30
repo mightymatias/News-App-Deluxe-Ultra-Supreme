@@ -27,7 +27,7 @@ public class Test_Class extends Storage {
     else{ System.out.println("TXT FILE SAVED"); }
 
     example.add(ex1);
-    test1.storeTxt();
+    test1.storeTxt("text");
     example.add(ex2);
     example.remove(ex1);
         return false;

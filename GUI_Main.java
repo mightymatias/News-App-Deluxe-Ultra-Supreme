@@ -4,6 +4,7 @@ Last update: 30 April 2021
 The main class that runs the GUI for the News App.
 
 Contributing authors: Connor Contursi, Austin Matias
+//test
  */
 
 import javafx.application.Application;
@@ -26,7 +27,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
-import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class GUI_Main extends Application {
@@ -41,24 +41,24 @@ public class GUI_Main extends Application {
     private static ArrayList<String> title = new ArrayList<>();
     private static ArrayList<String> author = new ArrayList<>();
     private static ArrayList<String> summary = new ArrayList<>();
-    private static ArrayList<String> URL = new ArrayList<>();
+    private static ArrayList<String> url = new ArrayList<>();
     private static ArrayList<String> imageURL = new ArrayList<>();
 
     //Drop shadow for pictures
-    DropShadow shadow = new DropShadow();
+    private static DropShadow shadow = new DropShadow();
 
     //Caption for hyperlink button
-    final static String[] captions = new String[]{
+    private final static String[] captions = new String[]{
             "View Article"
     };
 
     //Hyperlink creation for articles
-    final Hyperlink[] hpls = new Hyperlink[captions.length];
+    private final Hyperlink[] hpls = new Hyperlink[captions.length];
 
     //List of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
     // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
     // th, tr, tw, ua, us, ve, za]
-    final static String[] countries = new String[]{
+    private final static String[] countries = new String[]{
             "ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch",
             "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr",
             "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr",
@@ -68,36 +68,29 @@ public class GUI_Main extends Application {
     };
 
     //Creates main stage for the GUI so that all methods are using the same stage and not making a new stage each time
-    final Stage stage = new Stage();
+    private final Stage stage = new Stage();
 
     /**
-     * Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
-     * @param countrySelection The country code to be passed into the program.
+     * Starts program and launches storage
+     * @param args System arguments.
      */
-    public void info(String countrySelection){
-        //Country that will be passed to API
-        String country = countrySelection;
-
-        API_Translator translator = new API_Translator();
-
-        //Gets all article information
-        JSONObject topHeadlines = translator.sortByCountry(country);
-        this.articleList = translator.getArrayListOfArticlesFromJSONObject(topHeadlines);
-
-        primeArrayLists(articleList);
-
-        //Loads gui
-        guiDisplay();
+    public static void main (String[] args) {
+        favoriteStorage.initializeStorage();
+        launch(args);
+        favoriteStorage.saveArrayToFile();
     }
 
     /**
-     * Method to get all favorites to display them
+     * Calls GUI_translator to get api article information
+     * @param _articleList The list of articles to prime.
      */
-    public void viewFavorites() {
-        primeArrayLists(favoriteStorage.favoriteArray);
-
-        //Loads gui
-        favoriteDisplay();
+    public static void primeArrayLists (ArrayList<Article> _articleList){
+        GUI_Translator guiTranslator = new GUI_Translator();
+        title = guiTranslator.setTitleList(_articleList);
+        author = guiTranslator.setAuthorList(_articleList);
+        summary = guiTranslator.setDescriptionList(_articleList);
+        url = guiTranslator.setUrlList(_articleList);
+        imageURL = guiTranslator.setImageUrlList(_articleList);
     }
 
     /**
@@ -106,24 +99,24 @@ public class GUI_Main extends Application {
      * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start (Stage primaryStage) {
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 1600, 800);
 
         //Menubar component creation
         MenuBar menuBar = new MenuBar();
-        Menu menuSettings = new Menu("Settings");
+        Menu menuSettings = new Menu ("Settings");
 
         MenuItem viewFavorites = new MenuItem("View Favorites");
         viewFavorites.setOnAction((ActionEvent v) -> {
             viewFavorites();
         });
 
-        Menu country = new Menu("Country");
+        Menu country = new Menu ("Country");
 
         //Country selection
-        for(int a = 0; countries.length > a; a++){
+        for (int a = 0; countries.length > a; a++) {
             MenuItem subCountry = new MenuItem(countries[a]);
             int finalA = a;
 
@@ -150,7 +143,7 @@ public class GUI_Main extends Application {
         //Loading GIF to make the GUI top quality
         ImageView imageView = new ImageView();
         imageView.setImage(new Image("loading.gif"));
-        imageView.setFitWidth(500);
+        imageView.setFitWidth(700);
         imageView.setPreserveRatio(true);
         root.setCenter(imageView);
 
@@ -165,9 +158,32 @@ public class GUI_Main extends Application {
     }
 
     /**
+     * Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
+     * @param countrySelection The country code to be passed into the program.
+     */
+    protected void info (String countrySelection) {
+        GUI_Translator translator = new GUI_Translator();
+        this.articleList = translator.fetchArticles(countrySelection);
+        primeArrayLists(articleList);
+
+        //Loads gui
+        guiDisplay();
+    }
+
+    /**
+     * Method to get all favorites to display them
+     */
+    protected void viewFavorites () {
+        primeArrayLists(favoriteStorage.favoriteArray);
+
+        //Loads gui
+        favoriteDisplay();
+    }
+
+    /**
      * Creates main GUI to display
      */
-    public void guiDisplay() {
+    private void guiDisplay() {
         //Creates scrollpane object and image objects
         ScrollPane sp = new ScrollPane();
 
@@ -179,7 +195,7 @@ public class GUI_Main extends Application {
         Group root = new Group();
         Group webRoot = new Group();
 
-        //Scene for the webview [Under Construction]
+        //Scene for the webview
         Scene webScene = new Scene(webRoot, 1600, 900);
 
         //Menubar component creation
@@ -194,7 +210,7 @@ public class GUI_Main extends Application {
         Menu country = new Menu("Country");
 
         //Country selection
-        for(int a = 0; countries.length > a; a++){
+        for (int a = 0; countries.length > a; a++) {
             MenuItem subCountry = new MenuItem(countries[a]);
             int finalA = a;
 
@@ -239,7 +255,7 @@ public class GUI_Main extends Application {
         sp.pannableProperty().set(true);
 
         //Loop that pushes all of the article information to the GUI
-        for(int i = 0; i < (imageURL.toArray().length); i++) {
+        for (int i = 0; i < (imageURL.toArray().length); i++) {
 
             //Allows the images to be displayed
             final Image image;
@@ -249,7 +265,7 @@ public class GUI_Main extends Application {
 
             //Creates button to view the article
             final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
-            final String url = URL.get(i);
+            final String url = GUI_Main.url.get(i);
 
             //Creates hyperlink button that opens article website and article page
             hpl.setOnAction((ActionEvent e) -> {
@@ -282,7 +298,7 @@ public class GUI_Main extends Application {
 
             //Checks if author is provided
             Text auth;
-            if(author.get(i) != "null") {
+            if (author.get(i) != "null") {
                 auth = new Text(author.get(i));
                 auth.setFont(new Font("Arial Italic", 14));
             } else {
@@ -299,7 +315,7 @@ public class GUI_Main extends Application {
             int spaceAdded = 0;
 
             //Checks how long the description is and puts it on two lines if it is too long
-            if(length > 100) {
+            if (length > 100) {
                 for (int j = 0; j < length; j++) {
                     description.append(sum.charAt(j));
                     if (j > (length / 2) & spaceAdded == 0 & sum.charAt(j) == ' ') {
@@ -317,7 +333,7 @@ public class GUI_Main extends Application {
 
             //Checks if description is provided
             Text desc;
-            if(summary.get(i) != "null") {
+            if (summary.get(i) != "null") {
                 desc = new Text(printDescription);
                 desc.setFont(new Font("Arial", 16));
             } else {
@@ -351,6 +367,7 @@ public class GUI_Main extends Application {
         //Creates main scene to display articles
         Scene scene = new Scene(new VBox(), 1600, 800);
 
+        //Sets up scene with menubar
         ((VBox) scene.getRoot()).getChildren().addAll(menuBar, root);
 
         //Text object to create proper spacing between return button and web object
@@ -371,11 +388,6 @@ public class GUI_Main extends Application {
         webRoot.getChildren().addAll(vbWeb);
         webRoot.setAutoSizeChildren(true);
 
-        //Sets the stage name and color
-        stage.setTitle("NADUS");
-        scene.setFill(Color.WHITE);
-        stage.setResizable(false);
-
         //Generates stage
         stage.setScene(scene);
         stage.show();
@@ -384,7 +396,7 @@ public class GUI_Main extends Application {
     /**
      * Creates GUI to display favorited articles that have been saved
      */
-    public void favoriteDisplay() {
+    private void favoriteDisplay () {
         //Creates scrollpane object and image objects
         ScrollPane sp = new ScrollPane();
 
@@ -396,7 +408,7 @@ public class GUI_Main extends Application {
         Group root = new Group();
         Group webRoot = new Group();
 
-        //Scene for the webview [Under Construction]
+        //Scene for the webview
         Scene webScene = new Scene(webRoot, 1600, 900);
 
         //Menubar component creation
@@ -411,7 +423,7 @@ public class GUI_Main extends Application {
         Menu country = new Menu("Country");
 
         //Country selection
-        for(int a = 0; countries.length > a; a++){
+        for (int a = 0; countries.length > a; a++){
             MenuItem subCountry = new MenuItem(countries[a]);
             int finalA = a;
 
@@ -466,7 +478,7 @@ public class GUI_Main extends Application {
 
             //Creates button to view the article
             final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
-            final String url = URL.get(i);
+            final String url = GUI_Main.url.get(i);
 
             //Creates hyperlink button that opens article website and article page
             hpl.setOnAction((ActionEvent e) -> {
@@ -485,7 +497,6 @@ public class GUI_Main extends Application {
 
             favButton.setOnAction((ActionEvent z) -> {
                 favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
-                //System.out.println(favoriteStorage.favoriteArray.get(finalI));
                 viewFavorites();
             });
 
@@ -512,7 +523,7 @@ public class GUI_Main extends Application {
             int spaceAdded = 0;
 
             //Checks how long the description is and puts it on two lines if it is too long
-            if(length > 100) {
+            if (length > 100) {
                 for (int j = 0; j < length; j++) {
                     description.append(sum.charAt(j));
                     if (j > (length / 2) & spaceAdded == 0 & sum.charAt(j) == ' ') {
@@ -564,6 +575,7 @@ public class GUI_Main extends Application {
         //Creates main scene to display articles
         Scene scene = new Scene(new VBox(), 1600, 800);
 
+        //Sets up scene with menubar
         ((VBox) scene.getRoot()).getChildren().addAll(menuBar, root);
 
         //Text object to create proper spacing between return button and web object
@@ -584,36 +596,8 @@ public class GUI_Main extends Application {
         webRoot.getChildren().addAll(vbWeb);
         webRoot.setAutoSizeChildren(true);
 
-        //Sets the stage name and color
-        stage.setTitle("NADUS");
-        scene.setFill(Color.WHITE);
-        stage.setResizable(false);
-
         //Generates stage
         stage.setScene(scene);
         stage.show();
-    }
-
-    /**
-     * Starts program
-     * @param args System arguments.
-     */
-    public static void main(String[] args) {
-        favoriteStorage.initializeStorage();
-        launch(args);
-        favoriteStorage.saveArrayToFile();
-    }
-
-    /**
-     * Calls GUI_translator to get api article information
-     * @param _articleList The list of articles to prime.
-     */
-    public static void primeArrayLists(ArrayList<Article> _articleList){
-        GUI_Translator guiTranslator = new GUI_Translator();
-        title = guiTranslator.setTitleList(_articleList);
-        author = guiTranslator.setAuthorList(_articleList);
-        summary = guiTranslator.setDescriptionList(_articleList);
-        URL = guiTranslator.setUrlList(_articleList);
-        imageURL = guiTranslator.setImageUrlList(_articleList);
     }
 }

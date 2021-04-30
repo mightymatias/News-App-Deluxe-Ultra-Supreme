@@ -1,5 +1,5 @@
 /*
-Last update: 27 April 2021.
+Last update: 29 April 2021.
 
 The Storage object contains method that manipulate persistent data storage.
 
@@ -13,20 +13,13 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Storage extends Article {
+public class Storage {
 
     //The ArrayList that the favorite articles are saved in while the program runs.
     protected ArrayList<Article> favoriteArray = new ArrayList<>();
 
     //The file path for the file that will contain the favorite articles while the application is closed.
     private String filePath = "FavoriteArticles.txt";
-
-    /**HOW DOES THIS CLASS WORK? (README)
-     *First: Having an ArrayList of favorite Article and Check for existent of txt file (if not exist then create) (if exist then load data into an arraylist)
-     *Second: (optional) to add an article to favorite                    use method  addArticle (Article _article)
-     *Third:  (optional) to delete an article from the List               use method  deleteArticle (String _title)
-     *Fourth: (optional) to select an article from the List               use method  selectArticle (String _title)
-     */
 
     /**
      * The default constructor for the storage object.
@@ -97,10 +90,11 @@ public class Storage extends Article {
     /**
      * This method loads the favoriteArray from the text file on start up.
      */
-    protected void loadArray() {
+    private void loadArray() {
         try {
+            //Create a scanner object with the text from the favorites file.
             Scanner input = new Scanner(new File(this.filePath));
-            //setting variables to be assigned to object
+            //Reading through the file, creating Article objects from the information contained in it.
             while (input.hasNextLine()) {
                 String title = input.nextLine();
                 String author = input.nextLine();
@@ -115,13 +109,14 @@ public class Storage extends Article {
             System.out.println("Error with Storage.loadArray: " + e);
             e.printStackTrace();
         }
-        System.out.println(this.favoriteArray);
     }
 
     /**
      * This method completely clears the favorites file.
      */
     protected void clear() {
+        //Creates a new file object at the favorite file path, and writes an empty string to it,
+        //thus completely clearing the file.
         try {
             FileWriter favoriteFile = new FileWriter(this.filePath, false);
             favoriteFile.write("");
@@ -136,6 +131,7 @@ public class Storage extends Article {
      * @param _textToStore the line of text to store to the file.
      */
     protected void storeTxt(String _textToStore) {
+        //Writes the string given from the parameter into the favorites file.
         try {
             FileWriter out = new FileWriter(this.filePath, true);
             out.append(_textToStore);
@@ -146,8 +142,79 @@ public class Storage extends Article {
         }
     }
 
+
+    //==============Quan's TESTED CODE ====================
+
+    /**Modification Phase*/
+    /**
+     * The Purpose of this method is to clear the storage beforer reloaded it with modified data
+     * @throws IOException in case file not exist
+     */
+    public void clearStorage() throws IOException {
+        FileWriter fw = new FileWriter("FavoriteArticles.txt", false);
+        fw.write("");
+        fw.close();
+    }
+
+    /** Delete from DB
+     /** @paramm _title might be getting from Article.getTitle
+     * @throws IOException in case file not exist
+     * Using hashmap to search for that article index in the array
+     * After that remove it from running Array before update storage*/
+    public void deleteArticle (String _title) throws IOException {
+        /**String gonna be the title as key, Integer gonna be the index of that title in array.*/
+        /** def loadfactor 0.7f*/
+        Map<String, Integer> articleIndex = new HashMap<String, Integer>();
+
+        for (int i = 0; i < favoriteArray.size(); i++) {                                                                // looping any indexing title of article in favoriteArray
+            String currentIndexTitle = favoriteArray.get(i).getTitle();
+            int indexValue = i;
+            articleIndex.put(currentIndexTitle, indexValue);                                                            // put current pair ("title", index) into the map
+        }
+
+        if (articleIndex.containsKey(_title)) {                                                                         // checking existence of article
+            int getIndex = articleIndex.get(_title);                                                                    // getting the index from given title
+            favoriteArray.remove(getIndex);
+            System.out.println("Article has been removed from your favorite list.");
+        }
+        else
+        {
+            System.out.println("The article you are looking for is not exist!");
+        }
+        updateStorage();
+
+    }
+
+    /** This method purpose is to use whenever you finish with modifying database and want to save it
+     * @throws IOException in case file not exist
+     * */
+    public void updateStorage() throws IOException {
+        clearStorage();
+        FileWriter textLoader = new FileWriter("FavoriteArticles.txt", true);
+        for (int i  = 0; i < favoriteArray.size(); i++) {                                                               // toString each article in the favoriteArray then add it into the DB
+            String theArticle = favoriteArray.get(i).toString();
+            textLoader.append(theArticle);
+        }
+        textLoader.close();
+    }
+
+
+
+    /** The purpose of this is to add a new article to theDataArray (line 11) but this time require an Article Obj
+     * also prevent adding duplicate article to the array.
+     * @param _article is the selected article that user want to add into favorite list
+     * */
+    public void addArticle(Article _article)
+    {
+        if (selectArticle(_article.getTitle()) != -1)
+            System.out.println("Trying to add article but it is already exist! Skip forward");
+        else
+            favoriteArray.add(_article);
+    }
+
     /**Support method*/
-    /**This method searchs for an article to see if it exist or not if yes return its index in the ArrayList
+    /**The purpose of this methods is to search for an article to see if it exist or not
+     * if yes return its index in the ArrayList
      * Otherwise, return -1 to check at call.
      * @param  _title is require to search for the article in the Array as a keyword
      * this can be acquired by Article.getTitle() or hand type or String input
