@@ -48,50 +48,38 @@ public class GUI_Main extends Application {
     private static DropShadow shadow = new DropShadow();
 
     //Caption for hyperlink button
-    private final static String[] captions = new String[]{
+    private final static String[] captions = new String[] {
             "View Article"
     };
 
     //Hyperlink creation for articles
     private final Hyperlink[] hpls = new Hyperlink[captions.length];
 
-    //List of possible countries [ae, ar, at, au, be, bg, br, ca, ch, cn, co, cu, cz, de, eg, fr, gb, gr, hk, hu,
-    // id, ie, il, in, it, jp, kr, lt, lv, ma, mx, my, ng, nl, no, nz, ph, pl, pt, ro, rs, ru, sa, se, sg, si, sk,
-    // th, tr, tw, ua, us, ve, za]
-    private final static String[] countries = new String[]{
-            "ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch",
-            "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr",
-            "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr",
-            "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz",
-            "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg",
-            "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"
+    //List of possible country codes that API takes as input
+    private final static String[] countries = new String[] {
+            "ar", "au", "at", "be", "br", "bg", "ca", "cn", "co",
+            "cu", "cz", "eg", "fr", "de", "gr", "hk", "hu", "in",
+            "id", "ie", "il", "it", "jp", "lv", "lt", "my", "mx",
+            "ma", "nl", "nz", "ng", "no", "ph", "pl", "pt", "ro",
+            "ru", "sa", "rs", "sg", "sk", "si", "za", "kr", "se",
+            "ch", "tw", "th", "tr", "ae", "ua", "gb", "us", "ve"
+    };
+
+    //Full country names associated with the country code
+    private final static String[] fullCountryName = new String[] {
+            "Argentina", "Australia", "Austria", "Belgium", "Brazil",
+            "Bulgaria", "Canada", "China", "Colombia", "Cuba", "Czech Republic",
+            "Egypt", "France", "Germany", "Greece", "Hong Kong", "Hungary", "India",
+            "Indonesia", "Ireland", "Israel", "Italy", "Japan", "Latvia", "Lithuania",
+            "Malaysia", "Mexico", "Morocco", "Netherlands", "New Zealand", "Nigeria",
+            "Norway", "Philippines", "Poland", "Portugal", "Romania", "Russia", "Saudi Arabia",
+            "Serbia", "Singapore", "Slovakia", "Slovenia", "South Africa", "South Korea",
+            "Sweden", "Switzerland", "Taiwan", "Thailand", "Turkey", "UAE", "Ukraine",
+            "United Kingdom", "United States", "Venezuela"
     };
 
     //Creates main stage for the GUI so that all methods are using the same stage and not making a new stage each time
     private final Stage stage = new Stage();
-
-    /**
-     * Starts program and launches storage
-     * @param args System arguments.
-     */
-    public static void main (String[] args) {
-        favoriteStorage.initializeStorage();
-        launch(args);
-        favoriteStorage.saveArrayToFile();
-    }
-
-    /**
-     * Calls GUI_translator to get api article information
-     * @param _articleList The list of articles to prime.
-     */
-    public static void primeArrayLists (ArrayList<Article> _articleList){
-        GUI_Translator guiTranslator = new GUI_Translator();
-        title = guiTranslator.setTitleList(_articleList);
-        author = guiTranslator.setAuthorList(_articleList);
-        summary = guiTranslator.setDescriptionList(_articleList);
-        url = guiTranslator.setUrlList(_articleList);
-        imageURL = guiTranslator.setImageUrlList(_articleList);
-    }
 
     /**
      * Main GUI method that creates the entire GUI interface, including webengine.
@@ -113,16 +101,15 @@ public class GUI_Main extends Application {
             viewFavorites();
         });
 
-        Menu country = new Menu ("Country");
-
         //Country selection
+        Menu country = new Menu ("Country");
         for (int a = 0; countries.length > a; a++) {
-            MenuItem subCountry = new MenuItem(countries[a]);
+            MenuItem subCountry = new MenuItem(fullCountryName[a]);
             int finalA = a;
 
             //Adds article info to arrays to be displayed
             subCountry.setOnAction((ActionEvent f) -> {
-                info(countries[finalA]);
+                viewArticles(countries[finalA]);
             });
             country.getItems().add(subCountry);
         }
@@ -158,10 +145,33 @@ public class GUI_Main extends Application {
     }
 
     /**
+     * Starts program and launches storage
+     * @param args System arguments.
+     */
+    protected static void main (String[] args) {
+        favoriteStorage.initializeStorage();
+        launch(args);
+        favoriteStorage.saveArrayToFile();
+    }
+
+    /**
+     * Calls GUI_translator to get api article information
+     * @param _articleList The list of articles to prime.
+     */
+    protected static void primeArrayLists (ArrayList<Article> _articleList){
+        GUI_Translator guiTranslator = new GUI_Translator();
+        title = guiTranslator.setTitleList(_articleList);
+        author = guiTranslator.setAuthorList(_articleList);
+        summary = guiTranslator.setDescriptionList(_articleList);
+        url = guiTranslator.setUrlList(_articleList);
+        imageURL = guiTranslator.setImageUrlList(_articleList);
+    }
+
+    /**
      * Method to provide all of the info to the arrays, will be its own class later on but is here now for testing purposes
      * @param countrySelection The country code to be passed into the program.
      */
-    protected void info (String countrySelection) {
+    protected void viewArticles(String countrySelection) {
         GUI_Translator translator = new GUI_Translator();
         this.articleList = translator.fetchArticles(countrySelection);
         primeArrayLists(articleList);
@@ -211,12 +221,12 @@ public class GUI_Main extends Application {
 
         //Country selection
         for (int a = 0; countries.length > a; a++) {
-            MenuItem subCountry = new MenuItem(countries[a]);
+            MenuItem subCountry = new MenuItem(fullCountryName[a]);
             int finalA = a;
 
             //Adds article info to arrays to be displayed
             subCountry.setOnAction((ActionEvent f) -> {
-                info(countries[finalA]);
+                viewArticles(countries[finalA]);
                 root.getChildren().clear();
                 webRoot.getChildren().clear();
             });
@@ -263,9 +273,15 @@ public class GUI_Main extends Application {
             image = new Image(imageURL.get(i));
             pic = new ImageView(image);
 
+            //Provides image url when you hover over picture
+            final Tooltip tooltip = new Tooltip(GUI_Main.imageURL.get(i));
+            tooltip.setFont(new Font("Arial", 16));
+            Tooltip.install(pic, tooltip);
+
             //Creates button to view the article
             final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
             final String url = GUI_Main.url.get(i);
+            hpl.setFont(new Font("Arial", 16));
 
             //Creates hyperlink button that opens article website and article page
             hpl.setOnAction((ActionEvent e) -> {
@@ -277,11 +293,12 @@ public class GUI_Main extends Application {
             hbWeb.setAlignment(Pos.BASELINE_CENTER);
             hbWeb.getChildren().addAll(hpls);
 
+            //Variable for setOnAction
             int finalI = i;
 
             //Creates favorite button to favorite or unfavorite articles
             Button favButton = new Button("Favorite");
-
+            favButton.setFont(new Font("Arial", 14));
             favButton.setOnAction((ActionEvent z) -> {
                 if(articleList.get(finalI).getIsFavorited() == false) {
                     favoriteStorage.newFavorite(articleList.get(finalI));
@@ -330,7 +347,6 @@ public class GUI_Main extends Application {
                 printDescription = summary.get(i);
             }
 
-
             //Checks if description is provided
             Text desc;
             if (summary.get(i) != "null") {
@@ -375,6 +391,7 @@ public class GUI_Main extends Application {
 
         //Button to bring you back to article scene
         Button button = new Button("  Return  ");
+        button.setFont(new Font("Arial", 14));
         button.setOnAction((ActionEvent e) -> {
             stage.setScene(scene);
         });
@@ -424,12 +441,12 @@ public class GUI_Main extends Application {
 
         //Country selection
         for (int a = 0; countries.length > a; a++){
-            MenuItem subCountry = new MenuItem(countries[a]);
+            MenuItem subCountry = new MenuItem(fullCountryName[a]);
             int finalA = a;
 
             //Adds article info to arrays to be displayed
             subCountry.setOnAction((ActionEvent f) -> {
-                info(countries[finalA]);
+                viewArticles(countries[finalA]);
                 root.getChildren().clear();
                 webRoot.getChildren().clear();
             });
@@ -476,9 +493,15 @@ public class GUI_Main extends Application {
             image = new Image(imageURL.get(i));
             pic = new ImageView(image);
 
+            //Provides image url when you hover over picture
+            final Tooltip tooltip = new Tooltip(GUI_Main.imageURL.get(i));
+            tooltip.setFont(new Font("Arial", 16));
+            Tooltip.install(pic, tooltip);
+
             //Creates button to view the article
             final Hyperlink hpl = hpls[0] = new Hyperlink(captions[0]);
             final String url = GUI_Main.url.get(i);
+            hpl.setFont(new Font("Arial", 16));
 
             //Creates hyperlink button that opens article website and article page
             hpl.setOnAction((ActionEvent e) -> {
@@ -490,11 +513,12 @@ public class GUI_Main extends Application {
             hbWeb.setAlignment(Pos.BASELINE_CENTER);
             hbWeb.getChildren().addAll(hpls);
 
+            //Variable for setOnAction
             int finalI = i;
 
             //Creates favorite button to favorite or unfavorite articles
             Button favButton = new Button("Remove From Favorites");
-
+            favButton.setFont(new Font("Arial", 14));
             favButton.setOnAction((ActionEvent z) -> {
                 favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
                 viewFavorites();
@@ -537,7 +561,6 @@ public class GUI_Main extends Application {
             } else {
                 printDescription = summary.get(i);
             }
-
 
             //Checks if description is provided
             Text desc;
@@ -583,6 +606,7 @@ public class GUI_Main extends Application {
 
         //Button to bring you back to article scene
         Button button = new Button("  Return  ");
+        button.setFont(new Font("Arial", 14));
         button.setOnAction((ActionEvent e) -> {
             stage.setScene(scene);
         });
