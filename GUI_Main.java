@@ -37,8 +37,6 @@ public class GUI_Main extends Application {
     //The storage object to be used throughout the program
     private static Storage favoriteStorage = new Storage();
 
-    private static GUI_Translator translator = new GUI_Translator();
-
     //Arrays for all of the data that will be processed
     private static ArrayList<String> title = new ArrayList<>();
     private static ArrayList<String> author = new ArrayList<>();
@@ -77,6 +75,7 @@ public class GUI_Main extends Application {
      * @param countrySelection The country code to be passed into the program.
      */
     public void info(String countrySelection){
+        GUI_Translator translator = new GUI_Translator();
         this.articleList = translator.fetchArticles(countrySelection);
         primeArrayLists(articleList);
 
@@ -604,10 +603,10 @@ public class GUI_Main extends Application {
      */
     public static void primeArrayLists(ArrayList<Article> _articleList){
         GUI_Translator guiTranslator = new GUI_Translator();
-        title = translator.setTitleList(_articleList);
-        author = translator.setAuthorList(_articleList);
-        summary = translator.setDescriptionList(_articleList);
-        URL = translator.setUrlList(_articleList);
-        imageURL = translator.setImageUrlList(_articleList);
+        title = guiTranslator.setTitleList(_articleList);
+        author = guiTranslator.setAuthorList(_articleList);
+        summary = guiTranslator.setDescriptionList(_articleList);
+        URL = guiTranslator.setUrlList(_articleList);
+        imageURL = guiTranslator.setImageUrlList(_articleList);
     }
 }
