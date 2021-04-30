@@ -16,6 +16,27 @@ public class Test_Class extends Storage {
 
     ArrayList<Article> example = new ArrayList<>();
 
+    public static void main(String[] args) {
+        System.out.println("Storage.newFavorite test: " + testStorageDotNewFavorite());
+    }
+
+    /**
+     * Testing if newFavorite method in Storage.java works
+     * Test by Austin Matias.
+     * @return Returns true if test was a success.
+     */
+    private static boolean testStorageDotNewFavorite(){
+        //Creating test objects
+        Article testArticle = new Article("test title", "test author", "test description");
+        Storage testStorage = new Storage("testFavorite.txt");
+
+        //running the method that is the subject of the test
+        testStorage.newFavorite(testArticle);
+
+        //return the result of the text.
+        return testStorage.favoriteArray.toArray().length == 1;
+    }
+
     /**
      * Test case 1
      * @return
@@ -41,11 +62,5 @@ public class Test_Class extends Storage {
         return false;
     }
 
-    /**
-     * Test case 2
-      * @return
-     */
-    private boolean test2(){
-        return false;
-    }
+
 }
