@@ -18,6 +18,7 @@ public class Main {
         Storage storage = new Storage();
         storage.initializeStorage();
         selection();
+
     }
 
     /**
