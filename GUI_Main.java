@@ -592,6 +592,24 @@ public class GUI_Main extends Application {
 
         }
 
+        //Creates button that allows you to clear favorites; changes color to show action
+        Button clearFavorites = new Button("Clear Favorites");
+        clearFavorites.setFont(new Font("Arial", 20));
+        clearFavorites.setStyle("-fx-background-color: rgb(160,160,160)");
+        clearFavorites.setOnMouseEntered(e -> clearFavorites.setStyle("-fx-background-color: rgb(231,29,29)"));
+        clearFavorites.setOnAction((ActionEvent n) -> {
+            int favoriteLength = favoriteStorage.favoriteArray.toArray().length;
+            for(int m = 0; m < favoriteLength; m++) {
+                favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(0));
+            }
+            viewFavorites();
+        });
+        clearFavorites.setOnMouseExited(e -> clearFavorites.setStyle("-fx-background-color: rgb(160,160,160)"));
+
+        vb.getChildren().add(clearFavorites);
+        vb.setPadding(new Insets(20,0,10,0));
+        vb.setAlignment(Pos.TOP_CENTER);
+
         //Scrollbar and article components are added to a single group to be passed to the scene
         root.getChildren().addAll(vb, sp);
 
