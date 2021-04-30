@@ -2,12 +2,12 @@
 
  The main method of the project
 
- Contributing authors:Dillon Halbert, Connor Contursi
+ Contributing authors:Dillon Halbert, Connor Contursi, Austin Matias
  */
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Test_Class extends Storage {
+public class Test_Class {
 
     //Article objects for testing
     Article ex1 = new Article("title 1","author","there is a description","urrrrrrrrrrrrlllllll.com","null","4/30");
