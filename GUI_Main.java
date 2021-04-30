@@ -26,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
+import javafx.stage.StageStyle;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
@@ -172,7 +173,7 @@ public class GUI_Main extends Application {
         Group root = new Group();
         Group webRoot = new Group();
 
-        //Scene for the webview [Under Construction]
+        //Scene for the webview
         Scene webScene = new Scene(webRoot, 1600, 900);
 
         //Menubar component creation
@@ -389,7 +390,7 @@ public class GUI_Main extends Application {
         Group root = new Group();
         Group webRoot = new Group();
 
-        //Scene for the webview [Under Construction]
+        //Scene for the webview
         Scene webScene = new Scene(webRoot, 1600, 900);
 
         //Menubar component creation
@@ -478,7 +479,6 @@ public class GUI_Main extends Application {
 
             favButton.setOnAction((ActionEvent z) -> {
                 favoriteStorage.removeFavorite(favoriteStorage.favoriteArray.get(finalI));
-                //System.out.println(favoriteStorage.favoriteArray.get(finalI));
                 viewFavorites();
             });
 
