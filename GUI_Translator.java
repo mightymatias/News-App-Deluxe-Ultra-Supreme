@@ -1,10 +1,12 @@
 /*
-Last Update: 27 April 2021
+Last Update: 30 April 2021
 
 This class serves to interact between the articles and the GuiMain class.
 
-Contributing authors: Austin Matias
+Contributing authors: Austin Matias, Connor Contursi
  */
+import org.json.JSONObject;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -25,12 +27,26 @@ public class GUI_Translator {
     //An arrayList containing all of the header image URLs that need to be displayed on the GUI.
     protected ArrayList<String> imageUrlList = new ArrayList<>();
 
+    //An arrayList containing the favorited status of all articles to be displayed on the GUI.
     protected ArrayList<Boolean> favorited = new ArrayList<>();
+
+
+    private API_Translator translator = new API_Translator();
 
     /**
      * The default constructor for the translator.
      */
     public GUI_Translator(){}
+
+    /**
+     * This method fetches articles for a certain country.
+     * @param _country The country for the articles to come from.
+     * @return An arrayList containing the articles.
+     */
+    protected ArrayList<Article> fetchArticles(String _country){
+        JSONObject topHeadlines = translator.sortByCountry(_country);
+        return translator.getArrayListOfArticlesFromJSONObject(topHeadlines);
+    }
 
     //=================  SETTERS ===============
 
