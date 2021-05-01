@@ -88,6 +88,8 @@ public class GUI_Main extends Application {
     @Override
     public void start (Stage primaryStage) {
 
+        favoriteStorage.initializeStorage();
+
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 1600, 800);
 
